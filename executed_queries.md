@@ -143,7 +143,7 @@ show tables;
 
 -- populating tables:
 -- Use the correct database
-USE waste_track;
+USE eco_route_manager;
 
 -- -----------------------------------------------------
 -- Clear existing data in the correct order (reverse of insertion)
@@ -397,14 +397,14 @@ COMMIT;
 
 
 
- MySQL  localhost:3306 ssl  waste_track  SQL > ALTER TABLE Employee
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > ALTER TABLE Employee
                                             -> ADD COLUMN email VARCHAR(100) UNIQUE,
                                             -> ADD COLUMN password VARCHAR(255),
                                             -> ADD COLUMN role ENUM('Manager', 'Employee') DEFAULT 'Employee';
 Query OK, 0 rows affected (0.5966 sec)
 
 Records: 0  Duplicates: 0  Warnings: 0
- MySQL  localhost:3306 ssl  waste_track  SQL > ALTER TABLE Complaints
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > ALTER TABLE Complaints
                                             -> ADD COLUMN dept_id INT,
                                             -> ADD CONSTRAINT fk_complaint_dept
                                             ->   FOREIGN KEY (dept_id)
@@ -415,15 +415,15 @@ Query OK, 1 row affected (0.1512 sec)
 
 Records: 1  Duplicates: 0  Warnings: 0
 
- MySQL  localhost:3306 ssl  waste_track  SQL > UPDATE Employee
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > UPDATE Employee
                                             -> SET role = 'Manager'
                                             -> WHERE email = 'manager@gmail.com';
 Query OK, 1 row affected (0.0880 sec)
 
 Rows matched: 1  Changed: 1  Warnings: 0
- MySQL  localhost:3306 ssl  waste_track  SQL > -- 1. View for pending complaints (for stats page)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > -- 1. View for pending complaints (for stats page)
 Query OK, 0 rows affected (0.0385 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL > CREATE VIEW v_pending_complaints AS
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > CREATE VIEW v_pending_complaints AS
                                             -> SELECT
                                             ->     c.complaint_id,
                                             ->     c.citizen_name,
@@ -437,10 +437,10 @@ Query OK, 0 rows affected (0.0385 sec)
                                             -> LEFT JOIN route r ON c.route_id = r.route_id
                                             -> WHERE c.status IN ('Open', 'In Progress');
 Query OK, 0 rows affected (0.0590 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL >
- MySQL  localhost:3306 ssl  waste_track  SQL > -- 2. View for vehicle usage (for stats page)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > -- 2. View for vehicle usage (for stats page)
 Query OK, 0 rows affected (0.0007 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL > CREATE VIEW v_vehicle_usage AS
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > CREATE VIEW v_vehicle_usage AS
                                             -> SELECT
                                             ->     v.vehicle_no,
                                             ->     v.vehicle_type,
@@ -450,10 +450,10 @@ Query OK, 0 rows affected (0.0007 sec)
                                             -> LEFT JOIN assigned_to a ON v.vehicle_id = a.vehicle_id
                                             -> GROUP BY v.vehicle_id, v.vehicle_no, v.vehicle_type, v.status;
 Query OK, 0 rows affected (0.0134 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL >
- MySQL  localhost:3306 ssl  waste_track  SQL > -- 3. View for department summary (for manager & stats)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > -- 3. View for department summary (for manager & stats)
 Query OK, 0 rows affected (0.0007 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL > CREATE VIEW v_department_summary AS
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > CREATE VIEW v_department_summary AS
                                             -> SELECT
                                             ->     d.dept_id,
                                             ->     d.name AS department_name,
@@ -464,10 +464,10 @@ Query OK, 0 rows affected (0.0007 sec)
                                             -> LEFT JOIN vehicle v ON d.dept_id = v.dept_id
                                             -> GROUP BY d.dept_id, d.name;
 Query OK, 0 rows affected (0.0186 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL >
- MySQL  localhost:3306 ssl  waste_track  SQL > -- 4. View for waste collection stats (for stats page)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > -- 4. View for waste collection stats (for stats page)
 Query OK, 0 rows affected (0.0006 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL > CREATE VIEW v_waste_collection_stats AS
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > CREATE VIEW v_waste_collection_stats AS
                                             -> SELECT
                                             ->     r.route_name,
                                             ->     AVG(w.weight_kg) AS avg_collected_kg,
@@ -476,10 +476,10 @@ Query OK, 0 rows affected (0.0006 sec)
                                             -> JOIN route r ON w.route_id = r.route_id
                                             -> GROUP BY r.route_name;
 Query OK, 0 rows affected (0.0234 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL >
- MySQL  localhost:3306 ssl  waste_track  SQL > -- 5. View for employee performance (for stats page)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > -- 5. View for employee performance (for stats page)
 Query OK, 0 rows affected (0.0006 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL > CREATE VIEW v_employee_performance AS
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > CREATE VIEW v_employee_performance AS
                                             -> SELECT
                                             ->     e.name AS employee_name,
                                             ->     e.job_title,
@@ -489,24 +489,24 @@ Query OK, 0 rows affected (0.0006 sec)
                                             -> WHERE e.role = 'Employee'
                                             -> GROUP BY e.emp_id, e.name, e.job_title;
 Query OK, 0 rows affected (0.0091 sec)
- MySQL  localhost:3306 ssl  waste_track  SQL >
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
 
 
-  MySQL  localhost:3306 ssl  waste_track  SQL > update department set manager_id = 21 where dept_id = 5;
+  MySQL  localhost:3306 ssl  eco_route_manager  SQL > update department set manager_id = 21 where dept_id = 5;
 Query OK, 1 row affected (0.0205 sec)
 
 Rows matched: 1  Changed: 1  Warnings: 0
- MySQL  localhost:3306 ssl  waste_track  SQL >  update employee set role = "Manager", dept_id = 5 where emp_id = 21
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >  update employee set role = "Manager", dept_id = 5 where emp_id = 21
                                             -> ;
 Query OK, 1 row affected (0.0130 sec)
 
 Rows matched: 1  Changed: 1  Warnings: 0
- MySQL  localhost:3306 ssl  waste_track  SQL > ALTER TABLE Complaints
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > ALTER TABLE Complaints
                                             -> MODIFY COLUMN status ENUM('Open', 'In Progress', 'Resolved', 'Closed') DEFAULT 'Open';
 Query OK, 0 rows affected (0.1539 sec)
 
 Records: 0  Duplicates: 0  Warnings: 0
- MySQL  localhost:3306 ssl  waste_track  SQL >
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
 
 
 ```

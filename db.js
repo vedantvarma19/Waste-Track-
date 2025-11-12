@@ -28,7 +28,7 @@ function createPoolWithDatabase(dbName) {
 
 // ensureDatabaseSelected: create a DB-bound pool and swap it in once the DB exists.
 // This avoids "No database selected" when other modules call pool.query(...)
-const defaultDbName = process.env.MYSQL_DATABASE || "waste_track";
+const defaultDbName = process.env.MYSQL_DATABASE || "eco_route_manager";
 let ensureDbPromise = null;
 async function ensureDatabaseSelected() {
   if (config.database) return;

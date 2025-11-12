@@ -4,9 +4,9 @@
 -- -----------------------------------------------------
 
 -- Drop and Create the database for a fresh start on server launch
-DROP DATABASE IF EXISTS waste_track;
-CREATE DATABASE IF NOT EXISTS waste_track;
-USE waste_track;
+DROP DATABASE IF EXISTS eco_route_manager;
+CREATE DATABASE IF NOT EXISTS eco_route_manager;
+USE eco_route_manager;
 
 -- -----------------------------------------------------
 -- Section 1: Create Tables

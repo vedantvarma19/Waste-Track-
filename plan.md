@@ -171,7 +171,7 @@ module.exports = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "yourpassword",
-  database: "waste_track"
+  database: "eco_route_manager"
 });
 ```
 
