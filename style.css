@@ -1,5 +1,5 @@
 :root{
-  --bg-image: url('assets/welcome-bg.jpeg'); /* <-- This path will now work */
+  --bg-image: url('assets/welcom-bg.png'); /* <-- This path will now work */
   --accent: #2b8a3e;
   --primary-green: #2ecc71; /* Kept from your old styles */
   --primary-green-dark: #27ae60; /* Kept from your old styles */
