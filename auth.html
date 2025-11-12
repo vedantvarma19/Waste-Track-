@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>WasteTrack — Authentication</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* Using your existing :root variables from style.css */
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end)); 
+        padding: 24px; 
+    }
+    .container { max-width:1000px; margin:0 auto; display:flex; gap:24px; flex-wrap: wrap; }
+    .card { 
+        background: var(--bg-light); 
+        padding: 2rem; 
+        border-radius: 12px; 
+        box-shadow: 0 10px 30px var(--shadow-color); 
+        flex:1; 
+        min-width: 400px;
+    }
+    h2 { margin-top:0; text-align: center; color: var(--primary-green); }
+    label { 
+        display:block; 
+        margin-top:10px; 
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+    input, select { 
+        width:100%; 
+        padding: 0.75rem 1rem;
+        margin-top:6px; 
+        box-sizing:border-box; 
+        border-radius:8px; 
+        border:1px solid var(--border-light); 
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+    }
+    .row { display:flex; gap:12px }
+    .row > * { flex:1; }
+    button { 
+        margin-top:14px; 
+        padding: 0.8rem 1.5rem; 
+        border:0; 
+        background: var(--primary-green); 
+        color:#fff; 
+        border-radius:8px; 
+        cursor:pointer; 
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        text-transform: uppercase;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    button:hover { background: var(--primary-green-dark); transform: translateY(-2px); }
+    button.secondary { background: var(--staff-gray, #666); }
+    button.secondary:hover { background: var(--staff-gray-dark, #555); }
+    .muted { font-size:13px; color:#666; margin-top:8px; }
+    .error { color:crimson; margin-top:8px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>Create Employee Account</h2>
+      <form id="signupForm">
+        <label for="fullName">Full name</label>
+        <input id="fullName" name="name" required />
+
+        <div class="row">
+          <div>
+            <label for="phone">Contact number</label>
+            <input id="phone" name="phone" />
+          </div>
+          <div>
+            <label for="joinDate">Joining date</label>
+            <input id="joinDate" name="join_date" type="date" />
+          </div>
+        </div>
+
+        <label for="email">Email (login)</label>
+        <input id="email" name="email" type="email" required />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required minlength="6"/>
+
+        <label for="deptSelect">Department</label>
+        <select id="deptSelect" name="dept_id" required>
+          <option value="">Loading departments...</option>
+        </select>
+
+        <label for="roleSelect">Role</label>
+        <select id="roleSelect" name="role" required>
+          <option value="Employee">Employee</option>
+          <option value="Manager">Manager</option>
+          <option value="Head">Head (Admin)</option>
+        </select>
+        
+        <label for="empCode">Employee code (optional)</label>
+        <input id="empCode" name="emp_code" placeholder="eg. EMP-1023" />
+
+        <div class="muted">Choose 'Head' only for the main administrator.</div>
+        <div id="signupMsg" class="error"></div>
+        <button type="submit">Sign up</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" required />
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" required />
+        <div id="loginMsg" class="error"></div>
+        <button type="submit">Login</button>
+        <button type="button" class="secondary" id="toComplaintBtn">Submit Complaint</button>
+      </form>
+      <p class="muted">After login you will be redirected based on role: Employee → employee.html, Manager → manager.html, Head → head.html</p>
+    </div>
+  </div>
+
+  <script src="/auth.js"></script> </body>
+</html>

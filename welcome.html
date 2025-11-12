@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WasteTrack — Welcome</title>
+
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <meta name="description" content="WasteTrack — smart city waste management. Report complaints, manage routes, and analyze stats." />
+</head>
+<body class="page-welcome">
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo">🌱</div>
+        <div class="brand-text">
+          <h1>WasteTrack</h1>
+          <small>City Waste Management Portal</small>
+        </div>
+      </div>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="complaint.html">Report</a>
+        <a href="stats.html">Stats</a>
+        <a href="auth.html" class="btn small">Sign In / Sign Up</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero" role="main" aria-labelledby="hero-title">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-inner">
+      <div class="hero-left">
+        <h2 id="hero-title">Smart · Transparent · Sustainable</h2>
+        <p class="lead">Report waste issues, track progress, and help keep our city clean. WasteTrack connects citizens, drivers, and managers on one platform.</p>
+
+        <div class="cta-row">
+          <a class="btn large primary" href="complaint.html" aria-label="Report a new complaint">Report Issue</a>
+          <a class="btn large ghost" href="stats.html" aria-label="View public stats">View Stats</a>
+        </div>
+
+        <div class="quick-links">
+          <a href="auth.html">Employee/Manager login</a>
+          <a href="auth.html">Head login</a>
+        </div>
+      </div>
+
+      <aside class="hero-right" aria-hidden="false">
+        <div class="card glass">
+          <h3>Live Snapshot</h3>
+          <ul class="mini-metrics">
+            <li><strong id="metricPending">—</strong><small>Pending complaints</small></li>
+            <li><strong id="metricResolved">—</strong><small>Resolved</small></li>
+            <li><strong id="metricVehicles">—</strong><small>Active vehicles</small></li>
+          </ul>
+          <a class="btn small primary" href="stats.html" style="width: 100%;">Open Analytics</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <section class="features" aria-label="Features">
+    <div class="container">
+      <article class="feature">
+        <h4>Report & Track</h4>
+        <p>Fast complaint form & progress tracking for citizens — know who’s assigned and when it’s closed.</p>
+      </article>
+
+      <article class="feature">
+        <h4>Role-based Dashboard</h4>
+        <p>Managers assign routes and monitor employees. Employees update statuses in real-time.</p>
+      </article>
+
+      <article class="feature">
+        <h4>Analytics</h4>
+        <p>Charts and views showing vehicle usage, collection stats, and department summaries.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> WasteTrack — Built for smarter cities.</p>
+      <small>Designed with accessibility and performance in mind.</small>
+    </div>
+  </footer>
+
+  <script>
+    // simple dynamic small metric fetch for hero card
+    (async function loadMetrics(){
+      try{
+        // This endpoint already exists in your routes/views.js
+        const res = await fetch('/api/stats/overview'); 
+        if(!res.ok) throw new Error('Failed to fetch stats');
+        const data = await res.json();
+        
+        document.getElementById('metricPending').textContent = data.pending ?? '0';
+        document.getElementById('metricResolved').textContent = data.resolved ?? '0';
+        // Get vehicle count from the v_vehicle_usage array
+        document.getElementById('metricVehicles').textContent = (data.vehicleUsage || []).length || '0'; 
+      }catch(e){
+        console.warn('metrics load failed', e);
+      }
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
