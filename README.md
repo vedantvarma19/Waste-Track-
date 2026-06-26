@@ -283,18 +283,7 @@ http://localhost:3000
 
 ---
 
-# 📸 Screenshots
 
-You can add screenshots here.
-
-- Login Page
-- Dashboard
-- Complaint Management
-- Employee Management
-- Vehicle Management
-- Analytics Dashboard
-
----
 
 # 🎯 Learning Outcomes
 
