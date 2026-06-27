@@ -1,164 +1,157 @@
 ````markdown
+<p align="center">
+  <img src="assets/banner.png" alt="WasteTrack Banner" width="100%">
+</p>
+
 # ♻️ WasteTrack – Smart Waste Management System
 
 <div align="center">
 
-![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)
-![Express](https://img.shields.io/badge/Express.js-Backend-black?style=for-the-badge&logo=express)
-![MySQL](https://img.shields.io/badge/MySQL-Database-orange?style=for-the-badge&logo=mysql)
-![Vite](https://img.shields.io/badge/Vite-Build_Tool-purple?style=for-the-badge&logo=vite)
-![Chart.js](https://img.shields.io/badge/Chart.js-Analytics-red?style=for-the-badge&logo=chartdotjs)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)
+
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+
+![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 ### 🌍 Building Smarter Cities Through Digital Waste Management
 
-*A modern role-based municipal waste management platform that connects citizens, sanitation employees, managers, and administrators into one intelligent ecosystem.*
+*A modern role-based municipal waste management platform that streamlines complaint registration, employee coordination, waste collection, analytics, and administrative monitoring.*
+
+</div>
 
 ---
 
-## ✨ Overview
+# 📖 Overview
 
-WasteTrack is a full-stack Smart Waste Management System designed to digitize the complete complaint lifecycle—from complaint registration by citizens to task assignment, waste collection, analytics, and administrative monitoring.
+**WasteTrack** is a full-stack Smart Waste Management System developed to digitize the complete municipal waste management workflow. The platform connects **Citizens**, **Sanitation Employees**, **Managers**, and **Administrators** through a centralized role-based system, improving transparency, operational efficiency, and complaint resolution.
 
-The application focuses on reducing manual work, improving transparency, enabling faster complaint resolution, and providing real-time insights into municipal waste operations.
-
-Unlike traditional complaint portals, WasteTrack introduces role-based dashboards, intelligent task management, analytics, employee management, and scalable architecture suitable for real-world municipal deployments.
+Designed as both an academic DBMS project and a portfolio-ready web application, WasteTrack demonstrates practical implementation of modern full-stack development, relational database design, and role-based system architecture.
 
 ---
 
-# 🚀 Key Features
+# ✨ Key Features
 
-## 👤 Citizen Portal
+### 👤 Citizen Portal
 
+- Register and log in securely
 - Submit waste-related complaints
-- Upload complaint details
 - Select complaint location
 - Track complaint status
 - View complaint history
-- Public dashboard with statistics
+- Access public statistics dashboard
 
 ---
 
-## 👷 Employee Dashboard
+### 👷 Employee Dashboard
 
-- Secure Employee Login
+- Secure employee authentication
 - View assigned complaints
-- View complaint details
+- Update complaint progress
+- Record waste collection details
 - Resolve complaints
-- Record waste collected
-- Update complaint status
 - View personal task history
 
 ---
 
-## 👨‍💼 Manager Dashboard
+### 👨‍💼 Manager Dashboard
 
-Managers can manage only their own department.
+Managers can manage only their assigned department.
 
 Features include:
 
-- Department complaint overview
-- Assign employees
-- Assign vehicles
-- Reassign complaints
-- Close complaints
-- View department analytics
-- Employee workload tracking
-- Register department employees
-- Remove department employees
+- Department-wise complaint overview
+- Assign complaints to employees
+- Assign collection vehicles
+- Monitor employee workload
+- Manage department employees
+- Department analytics
+- Close completed complaints
 
 ---
 
-## 🏛 Head/Admin Dashboard
+### 🏛 Head / Admin Dashboard
 
 Complete administrative control.
 
-Features:
+Features include:
 
-- Search employees
-- Filter employees
 - Manage departments
-- Change employee roles
-- Delete employees
-- View city-wide analytics
-- Monitor complaint distribution
-- System administration
+- Search & filter employees
+- Update employee roles
+- Delete employee records
+- Monitor city-wide complaints
+- System-wide analytics
+- Administrative reporting
 
 ---
 
 # 🔐 Authentication & Authorization
 
-WasteTrack implements a secure Role-Based Access Control (RBAC) model.
+WasteTrack follows a **Role-Based Access Control (RBAC)** architecture.
 
 ### Supported Roles
 
 - 👤 Citizen
 - 👷 Employee
 - 👨‍💼 Manager
-- 🏛 Head
-- ⚙️ Admin
+- 🏛 Head / Admin
 
-Every API endpoint is protected according to user privileges.
+Authentication Features:
 
-Managers cannot access employees outside their department.
-
-Only Heads/Admins can perform global administrative actions.
+- Express Session Authentication
+- Password Encryption using bcrypt.js
+- Protected Routes
+- Department-Level Authorization
+- Secure Role Validation
 
 ---
 
-# 🏗 Architecture
+# 🏗 System Architecture
 
 ```text
-                    Citizen Portal
-                          │
-                          ▼
-                 React + Vite Frontend
-                          │
-               React Router + Context API
-                          │
-                    Axios API Layer
-                          │
-          ─────────────────────────────────
-                          │
-                   Express.js Backend
-                          │
-        Controllers → Services → Database
-                          │
-                       MySQL Database
+Citizen / Employee / Manager / Admin
+                 │
+                 ▼
+        React + Vite Frontend
+                 │
+      React Router + Context API
+                 │
+              Axios
+                 │
+────────────────────────────────────
+                 │
+      Express.js REST Backend
+                 │
+Controllers → Services → Middleware
+                 │
+                 ▼
+           MySQL Database
 ```
 
 ---
 
 # ⚙️ Tech Stack
 
-### Frontend
-
-- React
-- Vite
-- React Router
-- Context API
-- Axios
-- Chart.js
-- Vanilla CSS
-
-### Backend
-
-- Express.js
-- Node.js
-
-### Database
-
-- MySQL
-
-### Authentication
-
-- Session / Role Based Authentication
-
-### Development
-
-- Git
-- GitHub
-- npm
+| Category | Technologies |
+|-----------|--------------|
+| **Frontend** | React, Vite, React Router, Context API, Axios, Chart.js, CSS3 |
+| **Backend** | Node.js, Express.js |
+| **Database** | MySQL |
+| **Authentication** | Express Session, bcrypt.js, RBAC |
+| **Development Tools** | Git, GitHub, npm, Postman |
 
 ---
 
@@ -168,27 +161,25 @@ Only Heads/Admins can perform global administrative actions.
 WasteTrack/
 
 ├── frontend/
-│
 │   ├── src/
-│   │
 │   ├── components/
 │   ├── pages/
 │   ├── context/
-│   ├── services/
 │   ├── hooks/
+│   ├── services/
 │   ├── utils/
 │   ├── styles/
 │   ├── App.jsx
 │   └── main.jsx
 │
 ├── server/
-│
 │   ├── controllers/
 │   ├── routes/
 │   ├── middleware/
 │   ├── services/
 │   ├── config/
 │   ├── database/
+│   ├── models/
 │   └── utils/
 │
 └── README.md
@@ -196,135 +187,78 @@ WasteTrack/
 
 ---
 
-# 🔄 Complaint Lifecycle
+# 🔄 Complaint Workflow
 
 ```text
 Citizen
-
-     │
-
+    │
 Submit Complaint
-
-     │
-
-Complaint Stored
-
-     │
-
+    │
+Complaint Registered
+    │
 Assigned to Department
-
-     │
-
+    │
 Manager Assigns Employee
-
-     │
-
-Employee Receives Task
-
-     │
-
-Waste Collected
-
-     │
-
-Task Completed
-
-     │
-
-Complaint Closed
-
-     │
-
-Analytics Updated
+    │
+Employee Collects Waste
+    │
+Complaint Resolved
+    │
+Dashboard Analytics Updated
 ```
 
 ---
 
-# 📊 Analytics
+# 📊 Dashboard Analytics
 
-The system provides interactive dashboards showing:
+Interactive dashboards provide insights into:
 
 - Total Complaints
 - Pending Complaints
 - Resolved Complaints
 - Department Performance
-- Waste Collected
-- Vehicle Usage
 - Employee Performance
+- Waste Collection Statistics
+- Vehicle Usage
 - Complaint Trends
 
 ---
 
-# 🌟 Highlights
+# 🌟 Project Highlights
 
-✅ Role-Based Dashboards
-
-✅ Responsive Design
-
-✅ Clean Architecture
-
-✅ REST APIs
-
-✅ Modern React SPA
-
-✅ Department Based Access Control
-
-✅ Employee Management
-
-✅ Complaint Tracking
-
-✅ Analytics Dashboard
-
-✅ Interactive Charts
+- ✅ Modern React Single Page Application
+- ✅ Role-Based Dashboards
+- ✅ Secure Authentication & Authorization
+- ✅ RESTful API Architecture
+- ✅ Department-Based Access Control
+- ✅ Employee & Vehicle Management
+- ✅ Complaint Lifecycle Tracking
+- ✅ Interactive Analytics Dashboard
+- ✅ Responsive User Interface
+- ✅ Clean & Modular Codebase
 
 ---
 
-# 🎯 Future Enhancements
+# 🚀 Getting Started
 
-The project is designed with scalability in mind.
-
-Planned features include:
-
-- 🗺 GPS Complaint Location
-- 📍 Live Employee Navigation
-- 🚛 Vehicle Tracking
-- 🔔 SMS Notifications
-- 📧 Email Notifications
-- 🤖 AI Complaint Categorization
-- 🌡 Complaint Heatmaps
-- 📷 Before & After Images
-- 📱 Progressive Web App (PWA)
-- 📍 Route Optimization
-- 🔥 Live Real-Time Dashboard using WebSockets
-
----
-
-# 💻 Getting Started
-
-## Clone Repository
+### Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/vedantvarma19/Waste-Track-.git
 ```
 
----
-
-## Backend
+### Backend
 
 ```bash
 npm install
 npm run dev
 ```
 
----
-
-## Frontend
+### Frontend
 
 ```bash
 cd frontend
-
 npm install
-
 npm run dev
 ```
 
@@ -332,95 +266,83 @@ npm run dev
 
 # 📷 Screenshots
 
-> Add screenshots here.
+> Add screenshots after uploading them to the repository.
 
-- Landing Page
-- Citizen Portal
-- Employee Dashboard
-- Manager Dashboard
-- Head Dashboard
-- Analytics
-- Complaint Tracking
+- 🏠 Landing Page
+- 👤 Citizen Dashboard
+- 👷 Employee Dashboard
+- 👨‍💼 Manager Dashboard
+- 🏛 Admin Dashboard
+- 📊 Analytics Dashboard
+- 📋 Complaint Tracking
 
 ---
 
-# 💡 Why WasteTrack?
+# 🎯 Future Enhancements
 
-Municipal waste management often suffers from delayed complaint resolution, poor transparency, and inefficient manual coordination.
-
-WasteTrack addresses these challenges by providing:
-
-✔ Digital Complaint Registration
-
-✔ Role-Based Operations
-
-✔ Department Wise Management
-
-✔ Employee Accountability
-
-✔ Data-Driven Decision Making
-
-✔ Better Citizen Engagement
+- 🗺 Google Maps Integration
+- 🚛 Live Vehicle Tracking
+- 📍 GPS-Based Complaint Location
+- 🔔 Email & SMS Notifications
+- 📷 Before & After Complaint Images
+- 📱 Progressive Web App (PWA)
+- 🤖 AI-Based Complaint Classification
+- 🌡 Complaint Heatmaps
+- ⚡ Real-Time Dashboard using WebSockets
 
 ---
 
 # 📚 Learning Outcomes
 
-This project helped strengthen knowledge in:
+This project strengthened my understanding of:
 
-- Database Design
-- SQL Relationships
-- Normalization
-- REST APIs
-- Authentication
-- Authorization
-- React Development
-- Backend Architecture
+- Full-Stack Web Development
+- React & Modern Frontend Architecture
+- REST API Development
+- Authentication & Authorization
+- Role-Based Access Control (RBAC)
+- Express.js Backend Development
+- MySQL Database Design
+- SQL Relationships & Normalization
+- Dashboard Development
 - API Integration
-- Dashboard Design
-- Data Visualization
+- Clean Project Architecture
+- Git & GitHub Workflow
 
 ---
 
 # 🚀 Project Journey
 
-WasteTrack was originally developed during the **5th Semester** as part of the **Database Management Systems (DBMS)** course.
+WasteTrack was originally developed as part of the **Database Management Systems (DBMS)** course to apply core database concepts—including relational modeling, normalization, SQL queries, constraints, and transaction management—to a real-world problem.
 
-The objective was to implement real-world database concepts—including relational modeling, normalization, SQL queries, constraints, and efficient data management—through a practical application rather than a simple academic example.
+The project was later redesigned into a modern full-stack application using **React**, **Vite**, **Express.js**, and **MySQL**. Features such as role-based dashboards, complaint assignment workflows, employee and vehicle management, analytics, and a responsive user interface were added to transform it into a portfolio-ready smart-city solution.
 
-The team chose the domain of municipal waste management because it presents real operational challenges involving multiple stakeholders, structured data, and workflow management.
-
-After successfully completing the academic version, the project was expanded into a modern full-stack application. The frontend was redesigned using **React** and **Vite**, while the backend continued with **Express.js** and **MySQL**. Additional features such as role-based dashboards, complaint assignment workflows, analytics, responsive UI, employee management, and notification support were incorporated to evolve the project into a scalable smart-city solution.
-
-WasteTrack now serves as both an academic project demonstrating DBMS principles and a portfolio-ready full-stack application showcasing modern web development practices.
+Today, WasteTrack showcases both strong database engineering fundamentals and modern web development practices through a scalable, role-based architecture.
 
 ---
 
 # 🤝 Contributors
 
-Developed with ❤️ by the WasteTrack Team.
+Developed with ❤️ by the **WasteTrack Team**
 
 ---
 
 # ⭐ Support
 
-If you found this project useful,
+If you found this project useful:
 
-⭐ Star the repository
-
-🍴 Fork the project
-
-💡 Suggest improvements
-
-🐛 Report issues
+- ⭐ Star this repository
+- 🍴 Fork the project
+- 💡 Suggest improvements
+- 🐞 Report issues
 
 ---
 
 <div align="center">
 
-### ♻️ Making Cities Cleaner, Smarter, and More Sustainable.
+### ♻️ Making Cities Cleaner, Smarter, and More Sustainable
 
-**Built with ❤️ using React, Express.js & MySQL**
+**Built with ❤️ using React, Express.js, Node.js & MySQL**
 
 </div>
 ````
