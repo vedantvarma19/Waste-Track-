@@ -1,0 +1,166 @@
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| eco_route_manager  |
+| if                 |
+| information_schema |
+| internalspractice  |
+| ise                |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| vedantdb           |
+| waste_track        |
+| world              |
+| xyz                |
++--------------------+
+14 rows in set (0.0048 sec)
+ MySQL  localhost:3306 ssl  SQL > use eco_route_manager;
+Default schema set to `eco_route_manager`.
+Fetching global names, object names from `eco_route_manager` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > show tables;
++-----------------------------+
+| Tables_in_eco_route_manager |
++-----------------------------+
+| assigned_to                 |
+| complaints                  |
+| department                  |
+| employee                    |
+| route                       |
+| serves                      |
+| v_department_summary        |
+| v_employee_performance      |
+| v_employee_tasks            |
+| v_pending_complaints        |
+| v_vehicle_usage             |
+| v_waste_collection_stats    |
+| vehicle                     |
+| waste_record                |
++-----------------------------+
+14 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > select * from employee;
++--------+-----------------+------+--------+--------+--------------+------------+---------+---------+--------+--------------------------------+--------------------------------------------------------------+----------+-----------+----------+
+| emp_id | name            | DOB  | gender | salary | job_title    | contact    | address | dept_id | status | email                          | password                                                     | role     | join_date | emp_code |
++--------+-----------------+------+--------+--------+--------------+------------+---------+---------+--------+--------------------------------+--------------------------------------------------------------+----------+-----------+----------+
+|      1 | Priya Sharma    | NULL | NULL   |   NULL | Zone Manager | NULL       | NULL    |       1 | Active | manager.south@wastetrack.com   | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Manager  | NULL      | NULL     |
+|      2 | Anil Kumar      | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       1 | Active | emp.anil@wastetrack.com        | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|      3 | Sunita Rao      | NULL | NULL   |   NULL | Cleaner      | NULL       | NULL    |       1 | Active | emp.sunita@wastetrack.com      | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|      4 | Ravi Verma      | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       1 | Active | emp.ravi@wastetrack.com        | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|      5 | David Wilson    | NULL | NULL   |   NULL | Zone Manager | NULL       | NULL    |       2 | Active | manager.west@wastetrack.com    | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Manager  | NULL      | NULL     |
+|      6 | Meena Patil     | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       2 | Active | emp.meena@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|      7 | Gopal Singh     | NULL | NULL   |   NULL | Cleaner      | NULL       | NULL    |       2 | Active | emp.gopal@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|      8 | Kiran Desai     | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       2 | Active | emp.kiran@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|      9 | Suresh Reddy    | NULL | NULL   |   NULL | Zone Manager | NULL       | NULL    |       3 | Active | manager.east@wastetrack.com    | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Manager  | NULL      | NULL     |
+|     10 | Aisha Khan      | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       3 | Active | emp.aisha@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     11 | Manoj Nair      | NULL | NULL   |   NULL | Cleaner      | NULL       | NULL    |       3 | Active | emp.manoj@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     12 | Pooja Gupta     | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       3 | Active | emp.pooja@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     13 | Rajesh Kumar    | NULL | NULL   |   NULL | Zone Manager | NULL       | NULL    |       4 | Active | manager.north@wastetrack.com   | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Manager  | NULL      | NULL     |
+|     14 | Imran Baig      | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       4 | Active | emp.imran@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     15 | Lakshmi Murthy  | NULL | NULL   |   NULL | Cleaner      | NULL       | NULL    |       4 | Active | emp.lakshmi@wastetrack.com     | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     16 | Vijay Raj       | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       4 | Active | emp.vijay@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     17 | Fatima Ahmed    | NULL | NULL   |   NULL | Zone Manager | NULL       | NULL    |       5 | Active | manager.central@wastetrack.com | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Manager  | NULL      | NULL     |
+|     18 | Arjun Reddy     | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       5 | Active | emp.arjun@wastetrack.com       | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     19 | Sita Iyer       | NULL | NULL   |   NULL | Cleaner      | NULL       | NULL    |       5 | Active | emp.sita@wastetrack.com        | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     20 | Vikram Singh    | NULL | NULL   |   NULL | Driver       | NULL       | NULL    |       5 | Active | emp.vikram@wastetrack.com      | $2a$10$N9Z.q.a/1N.5dE.l5.a.9uLd8.g.s.X/eY.f.h.s.V.3.i.u.3    | Employee | NULL      | NULL     |
+|     21 | Head of Central | NULL | NULL   |   NULL | NULL         | 6361141954 | NULL    |       5 | Active | headc@gmail.com                | $2b$10$EwO3Z7UblOJw1BjlXKh.i.KXUTrolo/SkcGJc0DihR2D6OJ49d1.m | Head     | NULL      | NULL     |
+|     22 | manager_central | NULL | NULL   |   NULL | NULL         | 6361141954 | NULL    |       5 | Active | managerc@gmail.com             | $2b$10$S5BIDVqbsWikaEtc8BAnIuH92Is7ty8qoQpBAgtm8CxvvIYiN62/a | Manager  | NULL      | 1202     |
+|     23 | emp             | NULL | NULL   |   NULL | NULL         | 6361141954 | NULL    |       5 | Active | empc@gmail.com                 | $2b$10$oal0IK7vR7285YjuqQUUi.d4b8EYmzR9dYoNkY.KpNMKK5umaRCty | Employee | NULL      | NULL     |
++--------+-----------------+------+--------+--------+--------------+------------+---------+---------+--------+--------------------------------+--------------------------------------------------------------+----------+-----------+----------+
+23 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > select * from assigned_to;
++-----------+--------+------------+----------+--------------+----------------+-------------+
+| assign_id | emp_id | vehicle_id | route_id | complaint_id | departure_from | assign_date |
++-----------+--------+------------+----------+--------------+----------------+-------------+
+|         1 |      2 |          1 |        1 |            1 | NULL           | 2025-10-25  |
+|         2 |      3 |          2 |        2 |            2 | NULL           | 2025-10-25  |
+|         3 |      4 |          3 |        3 |            3 | NULL           | 2025-10-25  |
+|         4 |      6 |          5 |        5 |            6 | NULL           | 2025-10-25  |
+|         5 |      7 |          6 |        7 |            7 | NULL           | 2025-10-25  |
+|         6 |      8 |          7 |        6 |            8 | NULL           | 2025-10-25  |
+|         7 |     10 |          9 |        9 |           11 | NULL           | 2025-10-25  |
+|         8 |     11 |         10 |       11 |           12 | NULL           | 2025-10-25  |
+|         9 |     12 |         11 |       10 |           13 | NULL           | 2025-10-25  |
+|        10 |     14 |         13 |       13 |           16 | NULL           | 2025-10-25  |
+|        11 |     15 |         14 |       14 |           17 | NULL           | 2025-10-25  |
+|        12 |     16 |         15 |       15 |           18 | NULL           | 2025-10-25  |
+|        13 |     18 |         17 |       17 |           21 | NULL           | 2025-10-25  |
+|        14 |     19 |         18 |       18 |           22 | NULL           | 2025-10-25  |
+|        15 |     20 |         19 |       19 |           23 | NULL           | 2025-10-25  |
+|        16 |     23 |         17 |       20 |           26 | NULL           | 2025-11-12  |
++-----------+--------+------------+----------+--------------+----------------+-------------+
+16 rows in set (0.0007 sec)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > select * from department;
++---------+--------------+--------------+------------+-------+----------------------------------------+
+| dept_id | name         | manager_name | manager_id | email | location                               |
++---------+--------------+--------------+------------+-------+----------------------------------------+
+|       1 | South Zone   | NULL         |          1 | NULL  | Jayanagar, JP Nagar, BTM Layout        |
+|       2 | West Zone    | NULL         |          5 | NULL  | Rajajinagar, Yeshwanthpur, Malleswaram |
+|       3 | East Zone    | NULL         |          9 | NULL  | Indiranagar, Whitefield, Marathahalli  |
+|       4 | North Zone   | NULL         |         13 | NULL  | Hebbal, Yelahanka, RT Nagar            |
+|       5 | Central Zone | NULL         |         17 | NULL  | MG Road, Shivajinagar, Majestic        |
++---------+--------------+--------------+------------+-------+----------------------------------------+
+5 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > select * from waste_record;
++-----------+----------+-----------+---------------+-----------+-----------------+------------------+
+| record_id | route_id | assign_id | waste_type    | weight_kg | collection_date | processed_status |
++-----------+----------+-----------+---------------+-----------+-----------------+------------------+
+|         1 |        1 |      NULL | Mixed Waste   |    250.50 | 2025-10-25      | Pending          |
+|         2 |        2 |      NULL | Construction  |    750.00 | 2025-10-25      | Pending          |
+|         3 |        3 |      NULL | Mixed Waste   |    310.20 | 2025-10-25      | Pending          |
+|         4 |        4 |      NULL | Garden Waste  |    120.00 | 2025-10-24      | Pending          |
+|         5 |        1 |      NULL | Mixed Waste   |    230.00 | 2025-10-24      | Pending          |
+|         6 |        5 |      NULL | Mixed Waste   |    400.70 | 2025-10-25      | Pending          |
+|         7 |        6 |      NULL | Recyclable    |    150.00 | 2025-10-25      | Pending          |
+|         8 |        7 |      NULL | Market Waste  |    900.00 | 2025-10-25      | Pending          |
+|         9 |        8 |      NULL | Mixed Waste   |    210.50 | 2025-10-24      | Pending          |
+|        10 |        6 |      NULL | Recyclable    |    180.30 | 2025-10-24      | Pending          |
+|        11 |        9 |      NULL | Commercial    |    620.00 | 2025-10-25      | Pending          |
+|        12 |       10 |      NULL | Mixed Waste   |    300.00 | 2025-10-25      | Pending          |
+|        13 |       11 |      NULL | Mixed Waste   |    280.80 | 2025-10-24      | Pending          |
+|        14 |       12 |      NULL | Plastic Waste |    450.00 | 2025-10-24      | Pending          |
+|        15 |       10 |      NULL | Mixed Waste   |    310.00 | 2025-10-23      | Pending          |
+|        16 |       13 |      NULL | Mixed Waste   |    190.00 | 2025-10-25      | Pending          |
+|        17 |       14 |      NULL | Mixed Waste   |    220.00 | 2025-10-25      | Pending          |
+|        18 |       15 |      NULL | Garden Waste  |    130.50 | 2025-10-24      | Pending          |
+|        19 |       17 |      NULL | Mixed Waste   |    180.00 | 2025-10-25      | Pending          |
+|        20 |       18 |      NULL | Market Waste  |    700.00 | 2025-10-25      | Pending          |
+|        21 |       19 |      NULL | Commercial    |    350.00 | 2025-10-24      | Pending          |
+|        22 |       20 |      NULL | Market Waste  |    850.00 | 2025-10-24      | Pending          |
++-----------+----------+-----------+---------------+-----------+-----------------+------------------+
+22 rows in set (0.0006 sec)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL > select * from complaints;
++--------------+--------------+------------+-----------------------+--------------------------------------------------+----------+--------------+-------------+---------------------+---------------------+---------+
+| complaint_id | citizen_name | contact_no | location              | description                                      | route_id | assigned_emp | status      | complaint_date      | created_at          | dept_id |
++--------------+--------------+------------+-----------------------+--------------------------------------------------+----------+--------------+-------------+---------------------+---------------------+---------+
+|            1 | Rohan Gupta  | 9880011111 | Jayanagar 4th Block   | Garbage not picked up for 3 days.                |        1 |            2 | Resolved    | 2025-10-20 10:00:00 | 2025-11-12 22:13:24 |       1 |
+|            2 | Aditi Rao    | 9880011112 | JP Nagar              | Large pile of construction debris blocking road. |        2 |            3 | In Progress | 2025-10-21 11:00:00 | 2025-11-12 22:13:24 |       1 |
+|            3 | Vikram Reddy | 9880011113 | BTM Layout            | Overflowing bin near BTM Water Tank.             |        3 |            4 | In Progress | 2025-10-22 12:00:00 | 2025-11-12 22:13:24 |       1 |
+|            4 | Nisha Kumar  | 9880011114 | Koramangala 5th Block | Street cleaning required, lots of leaf litter.   |        4 |            2 | Resolved    | 2025-10-23 13:00:00 | 2025-11-12 22:13:24 |       1 |
+|            5 | Amit Patel   | 9880011115 | Jayanagar 9th Block   | Dead animal on the road, please remove.          |        1 |            3 | In Progress | 2025-10-24 14:00:00 | 2025-11-12 22:13:24 |       1 |
+|            6 | Sandeep Jain | 9880022221 | Rajajinagar           | Commercial waste dumped in residential area.     |        5 |            6 | Resolved    | 2025-10-20 10:00:00 | 2025-11-12 22:13:24 |       2 |
+|            7 | Divya M      | 9880022222 | Malleswaram 8th Cross | Public bin is broken and needs replacement.      |        6 |            7 | In Progress | 2025-10-21 11:00:00 | 2025-11-12 22:13:24 |       2 |
+|            8 | Prakash K    | 9880022223 | Yeshwanthpur          | Market waste not cleared, strong smell.          |        7 |            8 | In Progress | 2025-10-22 12:00:00 | 2025-11-12 22:13:24 |       2 |
+|            9 | Kavita S     | 9880022224 | Nagasandra            | Irregular collection frequency this month.       |        8 |            6 | Resolved    | 2025-10-23 13:00:00 | 2025-11-12 22:13:24 |       2 |
+|           10 | Harish G     | 9880022225 | Malleswaram           | Request for bulk waste pickup (old furniture).   |        6 |            7 | In Progress | 2025-10-24 14:00:00 | 2025-11-12 22:13:24 |       2 |
+|           11 | Zoya Farooqi | 9880033331 | Indiranagar 100 Ft Rd | Restaurant waste dumped on footpath.             |        9 |           10 | Resolved    | 2025-10-20 10:00:00 | 2025-11-12 22:13:24 |       3 |
+|           12 | Arnav Singh  | 9880033332 | Whitefield ITPL       | Bin near tech park is overflowing.               |       10 |           11 | In Progress | 2025-10-21 11:00:00 | 2025-11-12 22:13:24 |       3 |
+|           13 | Mona Lisa    | 9880033333 | Marathahalli          | Clogged drain due to garbage dumping.            |       11 |           12 | In Progress | 2025-10-22 12:00:00 | 2025-11-12 22:13:24 |       3 |
+|           14 | Rajeev Menon | 9880033334 | Bellandur             | Lake road is filled with plastic waste.          |       12 |           10 | Resolved    | 2025-10-23 13:00:00 | 2025-11-12 22:13:24 |       3 |
+|           15 | Chris Dsouza | 9880033335 | Whitefield            | Need collection in new apartment complex.        |       10 |           11 | In Progress | 2025-10-24 14:00:00 | 2025-11-12 22:13:24 |       3 |
+|           16 | Faisal Ahmed | 9880044441 | Hebbal                | Garbage truck is speeding in residential area.   |       13 |           14 | Resolved    | 2025-10-20 10:00:00 | 2025-11-12 22:13:24 |       4 |
+|           17 | Gita Shenoy  | 9880044442 | Yelahanka New Town    | Missed collection on scheduled day.              |       14 |           15 | In Progress | 2025-10-21 11:00:00 | 2025-11-12 22:13:24 |       4 |
+|           18 | Vinod Kumar  | 9880044443 | RT Nagar              | Request for green waste (garden) pickup.         |       15 |           16 | In Progress | 2025-10-22 12:00:00 | 2025-11-12 22:13:24 |       4 |
+|           19 | Rekha N      | 9880044444 | Manyata Tech Park     | Food waste bin is damaged.                       |       16 |           14 | Resolved    | 2025-10-23 13:00:00 | 2025-11-12 22:13:24 |       4 |
+|           20 | Leo Pinto    | 9880044445 | Hebbal                | Illegal dumping under flyover.                   |       13 |           15 | In Progress | 2025-10-24 14:00:00 | 2025-11-12 22:13:24 |       4 |
+|           21 | Sameer Ali   | 9880055551 | MG Road               | Public bin near metro station is full.           |       17 |           18 | Resolved    | 2025-10-20 10:00:00 | 2025-11-12 22:13:24 |       5 |
+|           22 | Tanya Joseph | 9880055552 | Shivajinagar          | Waste from bus stand area not cleared.           |       18 |           19 | In Progress | 2025-10-21 11:00:00 | 2025-11-12 22:13:24 |       5 |
+|           23 | Rakesh Shah  | 9880055553 | Commercial Street     | Shopkeepers dumping waste in alley.              |       19 |           20 | In Progress | 2025-10-22 12:00:00 | 2025-11-12 22:13:24 |       5 |
+|           24 | Priya David  | 9880055554 | Majestic Market       | Large amount of vegetable waste.                 |       20 |           18 | Resolved    | 2025-10-23 13:00:00 | 2025-11-12 22:13:24 |       5 |
+|           25 | Anand Murthy | 9880055555 | Brigade Road          | Overflowing bin, attracting stray dogs.          |       17 |           19 | In Progress | 2025-10-24 14:00:00 | 2025-11-12 22:13:24 |       5 |
+|           26 | Harsha       | 9966544811 | UVCE Boys hostel      | waste near mess                                  |       20 |           23 | Closed      | 2025-11-12 22:18:01 | 2025-11-12 22:18:01 |       5 |
++--------------+--------------+------------+-----------------------+--------------------------------------------------+----------+--------------+-------------+---------------------+---------------------+---------+
+26 rows in set (0.0008 sec)
+ MySQL  localhost:3306 ssl  eco_route_manager  SQL >
