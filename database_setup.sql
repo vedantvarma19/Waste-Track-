@@ -3,10 +3,7 @@
 -- (Updated for Chart.js and Filter Features)
 -- -----------------------------------------------------
 
--- Drop and Create the database for a fresh start on server launch
-DROP DATABASE IF EXISTS eco_route_manager;
-CREATE DATABASE IF NOT EXISTS eco_route_manager;
-USE eco_route_manager;
+-- Database tables creation (created inside the connected database context)
 
 -- -----------------------------------------------------
 -- Section 1: Create Tables
