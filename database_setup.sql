@@ -4,6 +4,17 @@
 -- -----------------------------------------------------
 
 -- Database tables creation (created inside the connected database context)
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS Notification_Log;
+DROP TABLE IF EXISTS Complaints;
+DROP TABLE IF EXISTS Waste_Record;
+DROP TABLE IF EXISTS Serves;
+DROP TABLE IF EXISTS Assigned_To;
+DROP TABLE IF EXISTS Route;
+DROP TABLE IF EXISTS Vehicle;
+DROP TABLE IF EXISTS Employee;
+DROP TABLE IF EXISTS Department;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- -----------------------------------------------------
 -- Section 1: Create Tables
