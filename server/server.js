@@ -45,6 +45,21 @@ app.use("/api", viewRoutes);
 async function initializeDatabase() {
   try {
     console.log("Initializing MySQL Database...");
+
+    // Auto-migration: Ensure latitude and longitude columns exist on Complaints table
+    try {
+      const [columns] = await pool.query("SHOW COLUMNS FROM Complaints");
+      const hasLatitude = columns.some(col => col.Field === 'latitude');
+      if (!hasLatitude) {
+        console.log("🛠️ Running database migration: Adding latitude/longitude to Complaints...");
+        await pool.query("ALTER TABLE Complaints ADD COLUMN latitude DECIMAL(10, 8) DEFAULT NULL");
+        await pool.query("ALTER TABLE Complaints ADD COLUMN longitude DECIMAL(11, 8) DEFAULT NULL");
+        console.log("✅ Database migration complete.");
+      }
+    } catch (migErr) {
+      console.log("ℹ️ Complaints table does not exist yet. It will be created by the setup script.");
+    }
+
     // Read the database schema setup script from root folder
     const sqlFilePath = path.join(process.cwd(), "database_setup.sql");
     const sqlScript = await fs.readFile(sqlFilePath, "utf-8");

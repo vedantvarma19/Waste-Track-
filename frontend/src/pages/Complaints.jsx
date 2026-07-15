@@ -1,7 +1,25 @@
 // frontend/src/pages/Complaints.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { fetchDepartments, fetchRoutesByDept, submitComplaint, filterComplaints } from "../services/api";
 import Toast from "../components/Toast";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+// Fix Leaflet default icon paths in built applications
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
+const DEPOT_COORDINATES = {
+  1: [12.9226, 77.5933], // South Zone Depot (Jayanagar Area)
+  2: [13.0232, 77.5697], // West Zone Depot (Yeshwanthpur Area)
+  3: [12.9756, 77.6358], // East Zone Depot (Indiranagar Area)
+  4: [13.0382, 77.5921], // North Zone Depot (Hebbal Area)
+  5: [12.9740, 77.6010]  // Central Zone Depot (MG Road Area)
+};
 
 const Complaints = () => {
   const [departments, setDepartments] = useState([]);
@@ -16,7 +34,9 @@ const Complaints = () => {
     location: "",
     dept_id: "",
     route_id: "",
-    description: ""
+    description: "",
+    latitude: null,
+    longitude: null
   });
 
   // Filters state
@@ -27,6 +47,13 @@ const Complaints = () => {
 
   // Notification state
   const [toast, setToast] = useState({ message: "", type: "success" });
+  const [geolocating, setGeolocating] = useState(false);
+  const [locationPinned, setLocationPinned] = useState(false);
+
+  // Map refs
+  const mapContainerRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const markerRef = useRef(null);
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -39,6 +66,61 @@ const Complaints = () => {
       loadComplaintsList();
     };
     loadInitialData();
+  }, []);
+
+  // Initialize interactive Leaflet map for citizen location selection
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    // Default center: Central Bangalore
+    const defaultCenter = [12.9716, 77.5946];
+
+    const map = L.map(mapContainerRef.current).setView(defaultCenter, 12);
+    mapInstanceRef.current = map;
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    // Draggable red pin
+    const pinIcon = L.divIcon({
+      html: `<span style="font-size: 2.2rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">📍</span>`,
+      className: "custom-map-icon",
+      iconSize: [35, 35],
+      iconAnchor: [17, 34]
+    });
+
+    const marker = L.marker(defaultCenter, { icon: pinIcon, draggable: true }).addTo(map);
+    markerRef.current = marker;
+
+    // Drag marker updates coordinates
+    marker.on("dragend", () => {
+      const pos = marker.getLatLng();
+      setFormData((prev) => ({
+        ...prev,
+        latitude: Number(pos.lat.toFixed(6)),
+        longitude: Number(pos.lng.toFixed(6))
+      }));
+      setLocationPinned(true);
+    });
+
+    // Map click moves marker and updates coordinates
+    map.on("click", (e) => {
+      marker.setLatLng(e.latlng);
+      setFormData((prev) => ({
+        ...prev,
+        latitude: Number(e.latlng.lat.toFixed(6)),
+        longitude: Number(e.latlng.lng.toFixed(6))
+      }));
+      setLocationPinned(true);
+    });
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
   }, []);
 
   const loadComplaintsList = async (activeFilters = {}) => {
@@ -57,6 +139,20 @@ const Complaints = () => {
     const deptId = e.target.value;
     setFormData((prev) => ({ ...prev, dept_id: deptId, route_id: "" }));
     setRoutes([]);
+
+    // Pan map to chosen zone center to help user pin quickly, but keep coordinates null until explicitly pinned
+    if (deptId && mapInstanceRef.current && markerRef.current) {
+      const center = DEPOT_COORDINATES[deptId] || [12.9716, 77.5946];
+      mapInstanceRef.current.setView(center, 14);
+      markerRef.current.setLatLng(center);
+      setFormData((prev) => ({
+        ...prev,
+        latitude: null,
+        longitude: null
+      }));
+      setLocationPinned(false);
+    }
+
     if (deptId) {
       try {
         const data = await fetchRoutesByDept(deptId);
@@ -70,6 +166,56 @@ const Complaints = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      setToast({ message: "Geolocation is not supported by your browser.", type: "error" });
+      return;
+    }
+
+    setGeolocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, accuracy } = position.coords;
+        const coords = [latitude, longitude];
+
+        // Pan map and place marker at current location
+        if (mapInstanceRef.current && markerRef.current) {
+          mapInstanceRef.current.setView(coords, 16);
+          markerRef.current.setLatLng(coords);
+        }
+
+        setFormData((prev) => ({
+          ...prev,
+          latitude: Number(latitude.toFixed(6)),
+          longitude: Number(longitude.toFixed(6))
+        }));
+        setLocationPinned(true);
+
+        if (accuracy > 150) {
+          setToast({ 
+            message: `Coordinates captured, but accuracy is low (~${Math.round(accuracy)}m). Drag the red map pin to adjust it precisely.`, 
+            type: "warning" 
+          });
+        } else {
+          setToast({ message: "High-precision GPS coordinates captured successfully!", type: "success" });
+        }
+        setGeolocating(false);
+      },
+      (error) => {
+        console.error("Geolocation fetch error", error);
+        let errorMsg = "Could not verify GPS coordinates. Please drag the red map pin to your location manually.";
+        if (error.code === error.PERMISSION_DENIED) {
+          errorMsg = "Location permission denied. Please enable location access or drag the red map pin to your hostel manually.";
+        } else if (error.code === error.TIMEOUT) {
+          errorMsg = "Location request timed out. Please drag the red map pin to your hostel manually.";
+        }
+        setToast({ message: errorMsg, type: "error" });
+        setGeolocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
   };
 
   const handleSubmit = async (e) => {
@@ -86,7 +232,9 @@ const Complaints = () => {
         location: formData.location || "N/A",
         description: formData.description,
         dept_id: Number(formData.dept_id),
-        route_id: formData.route_id ? Number(formData.route_id) : null
+        route_id: formData.route_id ? Number(formData.route_id) : null,
+        latitude: formData.latitude,
+        longitude: formData.longitude
       });
 
       setToast({
@@ -101,11 +249,20 @@ const Complaints = () => {
         location: "",
         dept_id: "",
         route_id: "",
-        description: ""
+        description: "",
+        latitude: null,
+        longitude: null
       });
+      setLocationPinned(false);
       setRoutes([]);
       
-      // Reload table
+      // Reset map marker to center
+      if (mapInstanceRef.current && markerRef.current) {
+        const defaultCenter = [12.9716, 77.5946];
+        mapInstanceRef.current.setView(defaultCenter, 12);
+        markerRef.current.setLatLng(defaultCenter);
+      }
+
       loadComplaintsList();
     } catch (err) {
       const errMsg = err.response?.data?.error || "Failed to submit complaint";
@@ -133,10 +290,10 @@ const Complaints = () => {
 
   return (
     <div className="fade-in">
-      <div style={{ maxWidth: "800px", margin: "0 auto 3rem auto" }}>
+      <div style={{ maxWidth: "850px", margin: "0 auto 3rem auto" }}>
         <h2 style={{ marginBottom: "1.5rem" }}>Submit Waste Complaint</h2>
         
-        <form onSubmit={handleSubmit} className="card flex flex-col gap-1">
+        <form onSubmit={handleSubmit} className="card flex flex-col gap-1" style={{ padding: "2rem" }}>
           <div className="grid-2">
             <div className="form-group">
               <label>Your Name</label>
@@ -170,7 +327,8 @@ const Complaints = () => {
               className="form-control" 
               value={formData.location} 
               onChange={handleChange} 
-              placeholder="e.g. 4th Cross Jayanagar, near metro station" 
+              placeholder="e.g. 4th Cross Jayanagar, near hostel main gate" 
+              required
             />
           </div>
 
@@ -186,15 +344,13 @@ const Complaints = () => {
               >
                 <option value="">-- Select Zone --</option>
                 {departments.map((d) => (
-                  <option key={d.dept_id} value={d.dept_id}>
-                    {d.name} {d.location ? `(${d.location})` : ""}
-                  </option>
+                  <option key={d.dept_id} value={d.dept_id}>{d.name}</option>
                 ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label>Specific Route (Optional)</label>
+              <label>Local Route (Optional)</label>
               <select 
                 name="route_id" 
                 className="form-control" 
@@ -204,96 +360,150 @@ const Complaints = () => {
               >
                 <option value="">-- Select Route --</option>
                 {routes.map((r) => (
-                  <option key={r.route_id} value={r.route_id}>
-                    {r.route_name}
-                  </option>
+                  <option key={r.route_id} value={r.route_id}>{r.route_name}</option>
                 ))}
               </select>
             </div>
           </div>
 
+          {/* Interactive Map Geolocation Section */}
+          <div className="form-group" style={{ marginTop: "1rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+              <label style={{ margin: 0 }}>📍 Pin Exact Collection Point</label>
+              <button
+                type="button"
+                className={locationPinned ? "btn btn-primary" : "btn btn-secondary"}
+                style={{ 
+                  padding: "0.4rem 0.8rem", 
+                  fontSize: "0.8rem", 
+                  height: "auto",
+                  backgroundColor: locationPinned ? "#10b981" : "var(--secondary)",
+                  color: "white",
+                  borderColor: locationPinned ? "#10b981" : "var(--secondary)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.25rem"
+                }}
+                onClick={handleGetLocation}
+                disabled={geolocating}
+              >
+                {geolocating ? (
+                  "📍 Locating..."
+                ) : locationPinned ? (
+                  <>✓ Location Pinned</>
+                ) : (
+                  "Pin My Current GPS Location"
+                )}
+              </button>
+            </div>
+            
+            <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", marginBottom: "0.75rem", textAlign: "left" }}>
+              Drag the red map pin directly to your hostel/house or click anywhere on the map to set the exact collection coordinates for drivers.
+            </p>
+
+            <div 
+              ref={mapContainerRef} 
+              style={{ 
+                height: "280px", 
+                width: "100%", 
+                borderRadius: "var(--radius-sm)", 
+                border: "1px solid var(--border)",
+                position: "relative",
+                zIndex: 1
+              }}
+            ></div>
+
+            {formData.latitude && formData.longitude && (
+              <div style={{ marginTop: "0.5rem", textAlign: "left" }}>
+                <span className="badge badge-resolved" style={{ fontSize: "0.75rem" }}>
+                  ✓ Exact GPS Coordinates Pinned: {formData.latitude}, {formData.longitude}
+                </span>
+              </div>
+            )}
+          </div>
+
           <div className="form-group">
-            <label>Description of Waste Issue</label>
+            <label>Describe the Waste Issue</label>
             <textarea 
               name="description" 
               className="form-control" 
+              rows="3" 
               value={formData.description} 
               onChange={handleChange} 
-              placeholder="Describe the issue (e.g. overflowing bin, construction waste blocking path, etc.)"
+              placeholder="e.g., Large pile of plastic bottles gathered outside the gate." 
               required
             ></textarea>
           </div>
 
           <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "1rem" }}>
-            Submit Complaint
+            🚀 Submit Waste Complaint
           </button>
         </form>
       </div>
 
-      <div>
-        <h3 style={{ marginBottom: "1rem" }}>All Submitted Complaints</h3>
+      {/* Recents list */}
+      <div className="card">
+        <h3 style={{ fontSize: "1.25rem", borderBottom: "2px solid var(--primary)", paddingBottom: "0.5rem", marginBottom: "1.5rem", textAlign: "left" }}>
+          Recent Public Complaints
+        </h3>
 
-        {/* Filters bar */}
-        <form onSubmit={applyFilters} className="card flex align-center gap-3" style={{ padding: "1rem 1.5rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
-          <div className="form-group" style={{ margin: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <label style={{ margin: 0, whiteSpace: "nowrap" }}>Status:</label>
-            <select name="status" className="form-control" value={filters.status} onChange={handleFilterChange} style={{ padding: "0.5rem", width: "140px" }}>
-              <option value="">All</option>
-              <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Closed">Closed</option>
-            </select>
-          </div>
+        {/* Filters */}
+        <form onSubmit={applyFilters} className="flex gap-2 align-center" style={{ marginBottom: "1.5rem", flexWrap: "wrap" }}>
+          <select 
+            name="status" 
+            className="form-control" 
+            value={filters.status} 
+            onChange={handleFilterChange}
+            style={{ maxWidth: "160px" }}
+          >
+            <option value="">All Statuses</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
+          </select>
 
-          <div className="form-group" style={{ margin: 0, display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <label style={{ margin: 0, whiteSpace: "nowrap" }}>Date:</label>
-            <input 
-              type="date" 
-              name="date" 
-              className="form-control" 
-              value={filters.date} 
-              onChange={handleFilterChange} 
-              style={{ padding: "0.5rem", width: "160px" }} 
-            />
-          </div>
+          <input 
+            type="date" 
+            name="date" 
+            className="form-control" 
+            value={filters.date} 
+            onChange={handleFilterChange}
+            style={{ maxWidth: "180px" }}
+          />
 
-          <div className="flex gap-2" style={{ marginLeft: "auto" }}>
-            <button type="submit" className="btn btn-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}>
-              Apply Filters
-            </button>
-            <button type="button" onClick={clearFilters} className="btn btn-ghost" style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}>
+          <button type="submit" className="btn btn-primary" style={{ padding: "0.6rem 1.2rem" }}>
+            Filter
+          </button>
+          
+          {(filters.status || filters.date) && (
+            <button type="button" onClick={clearFilters} className="btn btn-secondary" style={{ padding: "0.6rem 1.2rem" }}>
               Clear
             </button>
-          </div>
+          )}
         </form>
 
-        {/* Complaints Table */}
         <div className="table-wrapper">
           {loadingComplaints ? (
             <div style={{ padding: "2rem", textAlign: "center" }}>
-              <div className="skeleton" style={{ height: "40px", marginBottom: "0.5rem" }}></div>
               <div className="skeleton" style={{ height: "40px", marginBottom: "0.5rem" }}></div>
               <div className="skeleton" style={{ height: "40px" }}></div>
             </div>
           ) : recentComplaints.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-state-icon">📝</div>
-              <div className="empty-state-title">No Complaints Found</div>
-              <p className="empty-state-desc">Try clearing your filters or report a new waste issue above.</p>
+              <div className="empty-state-icon">🗑️</div>
+              <div className="empty-state-title">No matching complaints found</div>
             </div>
           ) : (
             <table className="table">
               <thead>
                 <tr>
                   <th style={{ width: "80px" }}>ID</th>
-                  <th>Citizen Name</th>
+                  <th>Citizen</th>
                   <th>Location</th>
-                  <th>Route</th>
                   <th>Description</th>
-                  <th>Assigned staff</th>
-                  <th style={{ width: "130px" }}>Status</th>
-                  <th style={{ width: "120px" }}>Date</th>
+                  <th>Department</th>
+                  <th style={{ width: "120px" }}>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -302,17 +512,13 @@ const Complaints = () => {
                     <td><strong>#{c.complaint_id}</strong></td>
                     <td>{c.citizen_name}</td>
                     <td>{c.location}</td>
-                    <td>{c.route_name || "N/A"}</td>
-                    <td style={{ maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={c.description}>
-                      {c.description}
-                    </td>
-                    <td>{c.assigned_employee || "Unassigned"}</td>
+                    <td style={{ textAlign: "left", fontSize: "0.85rem" }}>{c.description}</td>
+                    <td>{c.dept_name || c.department_name}</td>
                     <td>
                       <span className={`badge badge-${(c.status || "unknown").toLowerCase().replace(/\s+/g, "")}`}>
                         {c.status}
                       </span>
                     </td>
-                    <td>{c.complaint_date ? c.complaint_date.substring(0, 10) : "N/A"}</td>
                   </tr>
                 ))}
               </tbody>

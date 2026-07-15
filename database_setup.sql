@@ -149,6 +149,8 @@ CREATE TABLE IF NOT EXISTS Complaints (
     created_at DATETIME DEFAULT (CURRENT_TIMESTAMP), -- Added for filtering
     dept_id INT,
     duplicate_of_id INT DEFAULT NULL,
+    latitude DECIMAL(10, 8) DEFAULT NULL,
+    longitude DECIMAL(11, 8) DEFAULT NULL,
     CONSTRAINT fk_complaint_route FOREIGN KEY (route_id)
         REFERENCES Route(route_id)
         ON UPDATE CASCADE
@@ -356,6 +358,7 @@ GROUP BY e.emp_id, e.name, e.dept_id, d.name;
 CREATE OR REPLACE VIEW v_employee_tasks AS
 SELECT a.assign_id, a.emp_id, e.name AS employee_name, a.vehicle_id, v.vehicle_no,
        a.route_id, r.route_name, c.complaint_id, c.description, c.status,
+       c.latitude, c.longitude,
        w.record_id, w.weight_kg, w.collection_date AS waste_recorded_at, d.name AS department_name
 FROM assigned_to a
 LEFT JOIN employee e ON a.emp_id = e.emp_id

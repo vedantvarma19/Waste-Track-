@@ -29,7 +29,7 @@ function computeSimilarity(text1, text2) {
 }
 
 exports.createComplaint = async (req, res) => {
-  const { citizen_name, contact_no, location, description, route_id, dept_id } = req.body;
+  const { citizen_name, contact_no, location, description, route_id, dept_id, latitude, longitude } = req.body;
   
   if (!citizen_name || !contact_no || !description || !dept_id) {
     return res.status(400).json({ error: "Name, contact, description, and department are required" });
@@ -65,9 +65,9 @@ exports.createComplaint = async (req, res) => {
       // It's a duplicate! Insert as 'Closed' and link duplicate_of_id (no employee assigned)
       const mergedDescription = `[AI DUPLICATE of #${duplicateOfId}] ${description}`;
       const [result] = await connection.query(
-        `INSERT INTO Complaints (citizen_name, contact_no, location, description, route_id, dept_id, assigned_emp, status, duplicate_of_id)
-         VALUES (?, ?, ?, ?, ?, ?, NULL, 'Closed', ?)`,
-        [citizen_name, contact_no, location || "N/A", mergedDescription, route_id || null, dept_id, duplicateOfId]
+        `INSERT INTO Complaints (citizen_name, contact_no, location, description, route_id, dept_id, assigned_emp, status, duplicate_of_id, latitude, longitude)
+         VALUES (?, ?, ?, ?, ?, ?, NULL, 'Closed', ?, ?, ?)`,
+        [citizen_name, contact_no, location || "N/A", mergedDescription, route_id || null, dept_id, duplicateOfId, latitude || null, longitude || null]
       );
 
       await connection.commit();
@@ -99,9 +99,9 @@ exports.createComplaint = async (req, res) => {
     const bestEmployeeId = employees[0].emp_id;
 
     const [result] = await connection.query(
-      `INSERT INTO Complaints (citizen_name, contact_no, location, description, route_id, dept_id, assigned_emp, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'In Progress')`,
-      [citizen_name, contact_no, location || "N/A", description, route_id || null, dept_id, bestEmployeeId]
+      `INSERT INTO Complaints (citizen_name, contact_no, location, description, route_id, dept_id, assigned_emp, status, latitude, longitude)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'In Progress', ?, ?)`,
+      [citizen_name, contact_no, location || "N/A", description, route_id || null, dept_id, bestEmployeeId, latitude || null, longitude || null]
     );
 
     await connection.commit();

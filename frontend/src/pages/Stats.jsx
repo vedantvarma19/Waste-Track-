@@ -22,7 +22,7 @@ const Stats = () => {
   const zonePerformanceInst = useRef(null);
   const routeInst = useRef(null);
 
-  const loadData = async () => {
+  const loadData = async (mode = timelineMode) => {
     setLoading(true);
     setError(null);
     try {
@@ -83,7 +83,7 @@ const Stats = () => {
 
         // Process timeline based on daily/monthly mode
         let displayTimeline = [...timeline];
-        if (timelineMode === "monthly") {
+        if (mode === "monthly") {
           // Group by Month (YYYY-MM)
           const monthlyMap = new Map();
           timeline.forEach((t) => {
@@ -227,7 +227,7 @@ const Stats = () => {
   };
 
   useEffect(() => {
-    loadData();
+    loadData(timelineMode);
     return () => {
       if (wasteBreakdownInst.current) wasteBreakdownInst.current.destroy();
       if (timelineInst.current) timelineInst.current.destroy();
@@ -307,11 +307,10 @@ const Stats = () => {
           </div>
 
           <div style={{ position: "relative", height: "300px", width: "100%" }}>
-            {loading ? (
-              <div className="skeleton" style={{ height: "100%" }}></div>
-            ) : (
-              <canvas ref={timelineChartRef}></canvas>
+            {loading && (
+              <div className="skeleton" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 10 }}></div>
             )}
+            <canvas ref={timelineChartRef}></canvas>
           </div>
         </div>
 
@@ -321,11 +320,10 @@ const Stats = () => {
             ♻️ Waste Category Breakdown (Total Weight kg)
           </h3>
           <div style={{ position: "relative", height: "300px", width: "100%" }}>
-            {loading ? (
-              <div className="skeleton" style={{ height: "100%" }}></div>
-            ) : (
-              <canvas ref={wasteBreakdownChartRef}></canvas>
+            {loading && (
+              <div className="skeleton" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 10 }}></div>
             )}
+            <canvas ref={wasteBreakdownChartRef}></canvas>
           </div>
         </div>
 
@@ -340,11 +338,10 @@ const Stats = () => {
             🏢 Department Zone Performance (Registered vs. Resolved)
           </h3>
           <div style={{ position: "relative", height: "300px", width: "100%" }}>
-            {loading ? (
-              <div className="skeleton" style={{ height: "100%" }}></div>
-            ) : (
-              <canvas ref={zonePerformanceChartRef}></canvas>
+            {loading && (
+              <div className="skeleton" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 10 }}></div>
             )}
+            <canvas ref={zonePerformanceChartRef}></canvas>
           </div>
         </div>
 
@@ -354,11 +351,10 @@ const Stats = () => {
             🚛 Waste Weights Collected per Route (Total kg)
           </h3>
           <div style={{ position: "relative", height: "300px", width: "100%" }}>
-            {loading ? (
-              <div className="skeleton" style={{ height: "100%" }}></div>
-            ) : (
-              <canvas ref={routeChartRef}></canvas>
+            {loading && (
+              <div className="skeleton" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 10 }}></div>
             )}
+            <canvas ref={routeChartRef}></canvas>
           </div>
         </div>
 

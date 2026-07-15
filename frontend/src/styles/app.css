@@ -477,3 +477,110 @@ textarea.form-control {
   max-width: 320px;
   margin: 0 auto 1.5rem auto;
 }
+
+/* Map Routing Navigation Modal Styles */
+.map-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+.map-modal {
+  background: var(--text-white);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 950px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+.map-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--light);
+}
+.map-modal-body {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  height: 520px;
+}
+@media (max-width: 768px) {
+  .map-modal-body {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+.map-container {
+  height: 100%;
+  min-height: 350px;
+  background: #f1f5f9;
+  position: relative;
+}
+.map-sidebar {
+  padding: 1.5rem;
+  background: var(--light);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  text-align: left;
+}
+.route-metric {
+  background: var(--text-white);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.route-steps-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--dark);
+  margin-top: 0.5rem;
+}
+.route-steps {
+  font-size: 0.8rem;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  text-align: left;
+}
+.route-step-item {
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 0.4rem;
+}
+.route-step-item:last-child {
+  border-bottom: none;
+}
+.custom-map-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+}
+
