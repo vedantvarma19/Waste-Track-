@@ -16,7 +16,7 @@ if (process.env.MYSQL_DATABASE) {
 }
 
 let currentPool = mysql.createPool(config);
-const defaultDbName = process.env.MYSQL_DATABASE || "eco_route_manager";
+const defaultDbName = process.env.MYSQL_DATABASE || "defaultdb";
 let ensureDbPromise = null;
 
 async function ensureDatabaseSelected() {

@@ -54,8 +54,9 @@ exports.sendCitizenNotification = async (complaintId, statusType, details = {}) 
     
     if (twilioClient && complaint.contact_no && process.env.TWILIO_PHONE_NUMBER) {
       try {
-        // Format destination phone number to E.164 (defaults to India prefix +91 if 10 digits)
-        let formattedPhone = complaint.contact_no.trim();
+        // Clean and format destination phone number to E.164 (defaults to India prefix +91 if 10 digits)
+        let cleanPhone = complaint.contact_no.replace(/\s+/g, "").replace(/[-()]/g, "").trim();
+        let formattedPhone = cleanPhone;
         if (!formattedPhone.startsWith("+")) {
           if (formattedPhone.length === 10) {
             formattedPhone = `+91${formattedPhone}`;
@@ -72,8 +73,13 @@ exports.sendCitizenNotification = async (complaintId, statusType, details = {}) 
 
         console.log(`[SMS SYSTEM] Real SMS successfully sent to ${formattedPhone} via Twilio.`);
       } catch (smsError) {
-        console.error(`[SMS SYSTEM] Real SMS failed to send to ${complaint.contact_no}:`, smsError.message);
-        smsStatus = "Failed";
+        if (smsError.code === 21608) {
+          console.warn(`[SMS SYSTEM] Twilio Trial account restriction: ${formattedPhone} is unverified. Add it in your Twilio Console to test.`);
+          smsStatus = "Unverified Number";
+        } else {
+          console.error(`[SMS SYSTEM] Real SMS failed to send to ${complaint.contact_no}:`, smsError.message);
+          smsStatus = "Failed";
+        }
       }
     } else {
       console.log(`[SMS SYSTEM] (Simulation Mode) Twilio credentials missing in .env. Logged message: "${message}"`);
