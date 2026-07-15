@@ -5,6 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
+    "postinstall": "npm install --prefix frontend",
     "build": "npm run build --prefix frontend"
   },
   "repository": {
