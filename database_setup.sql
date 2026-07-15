@@ -309,18 +309,18 @@ CREATE OR REPLACE VIEW v_pending_complaints AS
 SELECT c.complaint_id, c.citizen_name, c.contact_no, c.location, c.description, c.status,
        d.dept_id, d.name AS department_name,
        e.emp_id, e.name AS employee_name, r.route_id, r.route_name
-FROM complaints c
-LEFT JOIN department d ON c.dept_id = d.dept_id
-LEFT JOIN employee e ON c.assigned_emp = e.emp_id
-LEFT JOIN route r ON c.route_id = r.route_id
+FROM Complaints c
+LEFT JOIN Department d ON c.dept_id = d.dept_id
+LEFT JOIN Employee e ON c.assigned_emp = e.emp_id
+LEFT JOIN Route r ON c.route_id = r.route_id
 WHERE c.status IN ('Open','Pending', 'In Progress');
 
 -- View 2: Vehicle Usage
 CREATE OR REPLACE VIEW v_vehicle_usage AS
 SELECT v.vehicle_id, v.vehicle_no, v.vehicle_type AS vehicle_type, v.status AS vehicle_status,
        COUNT(a.assign_id) AS total_assignments
-FROM vehicle v
-LEFT JOIN assigned_to a ON v.vehicle_id = a.vehicle_id
+FROM Vehicle v
+LEFT JOIN Assigned_To a ON v.vehicle_id = a.vehicle_id
 GROUP BY v.vehicle_id, v.vehicle_no, v.vehicle_type, v.status;
 
 -- View 3: Department Summary
@@ -328,26 +328,26 @@ CREATE OR REPLACE VIEW v_department_summary AS
 SELECT d.dept_id, d.name AS department_name,
        COUNT(DISTINCT e.emp_id) AS total_employees,
        COUNT(DISTINCT v.vehicle_id) AS total_vehicles
-FROM department d
-LEFT JOIN employee e ON d.dept_id = e.dept_id
-LEFT JOIN vehicle v ON d.dept_id = v.dept_id
+FROM Department d
+LEFT JOIN Employee e ON d.dept_id = e.dept_id
+LEFT JOIN Vehicle v ON d.dept_id = v.dept_id
 GROUP BY d.dept_id, d.name;
 
 -- View 4: Waste Collection Stats
 CREATE OR REPLACE VIEW v_waste_collection_stats AS
 SELECT r.route_id, r.route_name, COUNT(w.record_id) AS records, SUM(w.weight_kg) AS total_collected_kg,
        AVG(w.weight_kg) AS avg_collected_kg
-FROM waste_record w
-JOIN route r ON w.route_id = r.route_id
+FROM Waste_Record w
+JOIN Route r ON w.route_id = r.route_id
 GROUP BY r.route_id, r.route_name;
 
 -- View 5: Employee Performance
 CREATE OR REPLACE VIEW v_employee_performance AS
 SELECT e.emp_id, e.name AS employee_name, e.dept_id, d.name AS department_name,
        COUNT(c.complaint_id) AS complaints_handled
-FROM employee e
-LEFT JOIN complaints c ON e.emp_id = c.assigned_emp AND c.status IN ('Resolved','Closed')
-LEFT JOIN department d ON e.dept_id = d.dept_id
+FROM Employee e
+LEFT JOIN Complaints c ON e.emp_id = c.assigned_emp AND c.status IN ('Resolved','Closed')
+LEFT JOIN Department d ON e.dept_id = d.dept_id
 WHERE e.role = 'Employee'
 GROUP BY e.emp_id, e.name, e.dept_id, d.name;
 
@@ -357,13 +357,13 @@ SELECT a.assign_id, a.emp_id, e.name AS employee_name, a.vehicle_id, v.vehicle_n
        a.route_id, r.route_name, c.complaint_id, c.description, c.status,
        c.latitude, c.longitude,
        w.record_id, w.weight_kg, w.collection_date AS waste_recorded_at, d.name AS department_name
-FROM assigned_to a
-LEFT JOIN employee e ON a.emp_id = e.emp_id
-LEFT JOIN vehicle v ON a.vehicle_id = v.vehicle_id
-LEFT JOIN route r ON a.route_id = r.route_id
-LEFT JOIN complaints c ON a.complaint_id = c.complaint_id
-LEFT JOIN waste_record w ON w.route_id = a.route_id AND w.collection_date = a.assign_date
-LEFT JOIN department d ON e.dept_id = d.dept_id;
+FROM Assigned_To a
+LEFT JOIN Employee e ON a.emp_id = e.emp_id
+LEFT JOIN Vehicle v ON a.vehicle_id = v.vehicle_id
+LEFT JOIN Route r ON a.route_id = r.route_id
+LEFT JOIN Complaints c ON a.complaint_id = c.complaint_id
+LEFT JOIN Waste_Record w ON w.route_id = a.route_id AND w.collection_date = a.assign_date
+LEFT JOIN Department d ON e.dept_id = d.dept_id;
 
 -- 10) Notification_Log
 DROP TABLE IF EXISTS Notification_Log;
