@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS Route (
     fare DECIMAL(8,2),
     dept_id INT,  -- <-- NEWLY ADDED
     CONSTRAINT fk_route_dept FOREIGN KEY (dept_id) 
-        REFERENCES department(dept_id) -- <-- NEWLY ADDED
+        REFERENCES Department(dept_id) -- <-- UPDATED TO CASE-SENSITIVE UPPERCASE
         ON UPDATE CASCADE
         ON DELETE SET NULL
 );
