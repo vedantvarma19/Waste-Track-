@@ -2,16 +2,16 @@
   <img src="assets/banner.png" alt="WasteTrack Banner" width="100%">
 </p>
 
-   #       ♻️ WasteTrack – Smart Waste Management System
+# ♻️ WasteTrack – Smart Waste Management System
 
 <div align="center">
 
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white) ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
+![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white) ![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white) ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
-### 🌍 Building Smarter Cities Through Digital Waste Management
+### 🌍 Building Smarter Cities Through Digital Waste Management & Live Telemetry
 
-*A modern role-based municipal waste management platform that streamlines complaint registration, employee coordination, waste collection, analytics, and administrative monitoring.*
+*A modern, production-ready, role-based municipal waste management platform that streamlines citizen complaint registrations, exact GPS location pinning, live employee telemetry routing, waste collection logging, and administrative monitoring.*
 
 </div>
 
@@ -19,75 +19,44 @@
 
 # 📖 Overview
 
-**WasteTrack** is a full-stack Smart Waste Management System developed to digitize the complete municipal waste management workflow. The platform connects **Citizens**, **Sanitation Employees**, **Managers**, and **Administrators** through a centralized role-based system, improving transparency, operational efficiency, and complaint resolution.
+**WasteTrack** is a production-deployed, full-stack Smart Waste Management System designed to digitize the complete municipal sanitation workflow. The platform connects **Citizens**, **Sanitation Employees (Drivers/Cleaners)**, **Zone Managers**, and **Administrators** through a secure, centralized role-based ecosystem, improving public transparency and operational logistics.
 
-Designed as both an academic DBMS project and a portfolio-ready web application, WasteTrack demonstrates practical implementation of modern full-stack development, relational database design, and role-based system architecture.
+The system incorporates **OpenStreetMap & Leaflet geolocation mappings**, a **Jaccard similarity duplicate detection engine**, a **balanced workload queue selection algorithm**, and **real-time SMS gateways** to resolve urban sanitation challenges.
 
 ---
 
 # ✨ Key Features
 
 ### 👤 Citizen Portal
-- Register and log in securely
-- Submit waste-related complaints
-- Select complaint location
-- Track complaint status
-- View complaint history
-- Access public statistics dashboard
+- **Leaflet Interactive Map Pinning:** Drag and drop a red map pin marker (or click anywhere on the map) to pin the exact coordinates of the waste site.
+- **HTML5 Geolocation Integration:** Click `"Pin My Current GPS Location"` to fetch live device coordinates automatically, updating the button to a green **`✓ Location Pinned`** status badge.
+- **Auto-depot Centering:** Selecting a zone automatically pans the map to that zone's regional depot to assist manual pinning.
+- **Track Status & Alerts:** View live complaint resolution progress, assigned driver details, vehicle registration logs, and notifications.
 
 ### 👷 Employee Dashboard
-- Secure employee authentication
-- View assigned complaints
-- Update complaint progress
-- Record waste collection details
-- Resolve complaints
-- View personal task history
+- **Live Driver Geolocation Start:** Instantly maps the route starting directly from the **driver's live position (truck icon `🚛`)** instead of a distant corporate depot.
+- **Campus Pathway Foot Routing:** Uses the **FOSSGIS OpenStreetMap Foot Routing Engine** to plot navigation paths along actual pedestrian pathways, walkways, and campus shortcuts (such as inside the UVCE campus), preventing roads-only snapping gaps and building-crossing errors.
+- **Simulated Route Fallbacks:** Automatically draws straight-line dotted navigation paths if routing APIs hit network constraints.
+- **Waste Weight Logging:** Record exact garbage metrics (`weight_kg`) and waste types (Hazardous, Plastic, Organic, Recyclable) upon resolving tasks.
 
-### 👨‍💼 Manager Dashboard
-*Managers can manage only their assigned department.*
-- Department-wise complaint overview
-- Assign complaints to employees
-- Assign collection vehicles
-- Monitor employee workload
-- Manage department employees
-- Department analytics
-- Close completed complaints
+### 👨💼 Manager Dashboard
+*Managers manage only their assigned municipal zone (South, West, East, North, Central).*
+- **Balanced Workload Driver Assignment:** Automated dispatch query recommends the driver in the department currently carrying the lightest active queue.
+- **Zonal Personnel Management:** Register, monitor, and delete sanitation personnel within their respective zones.
+- **Operational Cockpit:** Re-assign drivers, register municipal collection vehicles, override dispatch targets, and review complaints.
 
 ### 🏛 Head / Admin Dashboard
-*Complete administrative control.*
-- Manage departments
-- Search & filter employees
-- Update employee roles
-- Delete employee records
-- Monitor city-wide complaints
-- System-wide analytics
-- Administrative reporting
-
----
-
-# 🔐 Authentication & Authorization
-
-WasteTrack follows a **Role-Based Access Control (RBAC)** architecture.
-
-### Supported Roles
-- 👤 Citizen
-- 👷 Employee
-- 👨‍💼 Manager
-- 🏛 Head / Admin
-
-### Authentication Features
-- Express Session Authentication
-- Password Encryption using bcrypt.js
-- Protected Routes
-- Department-Level Authorization
-- Secure Role Validation
+*System-wide administrative control.*
+- **Role Escalations:** Manage, promote, and update worker clearance roles (Employee, Manager, Head, Admin).
+- **Zonal Auditing:** Filter, search, and audit employee databases across all regional zones.
+- **Staff Purging:** Safely delete obsolete employee accounts while preserving referential database constraint logs.
 
 ---
 
 # 🧠 Core Algorithmic Engineering
 
 ### 1. Jaccard-Style Text Token Similarity Engine
-To prevent operational bottlenecks from duplicate reports (e.g., multiple citizens reporting the same overflowing garbage container), the backend intercepts new tickets inside `complaintController.js` and parses them against active reports using a customized string token intersection check:
+To prevent duplicate complaint registrations from flooding sanitation queues (e.g. multiple citizens reporting the same overflowing container), the backend parses incoming tickets against active zone reports:
 
 $$\text{Similarity Score} = \frac{|\text{Tokens}_{\text{New Submitted}} \cap \text{Tokens}_{\text{Active Archive}}|}{|\text{Tokens}_{\text{New Submitted}} \cup \text{Tokens}_{\text{Active Archive}}|}$$
 
@@ -101,10 +70,10 @@ if (combinedScore >= 0.40) {
     duplicateOfId = activeTicket.complaint_id; // Merges the ticket state to eliminate redundant fleet vehicle runs
 }
 ```
-If a complaint clears this validation threshold, it transitions automatically into an `AI DUPLICATE` state, locking its lifecycle to the master ticket to avoid redundant fleet runs.
+Duplicates are closed automatically and linked as `AI DUPLICATE`, merging their lifecycles to save fuel and collection resources.
 
 ### 2. Balanced-Workload Queue Matching
-To optimize delivery dispatch times, unique verified entries bypass dispatch bottlenecks via automated queries that determine which driver has the lightest workload in that zone:
+Bypasses manual dispatcher bottlenecks by matching new tickets to the sanitation driver with the lightest current active workload:
 ```sql
 SELECT e.emp_id, COUNT(c.complaint_id) AS active_load
 FROM Employee e
@@ -113,28 +82,34 @@ WHERE e.dept_id = ? AND e.role = 'Employee'
 GROUP BY e.emp_id ORDER BY active_load ASC LIMIT 1;
 ```
 
+### 3. Pedestrian & Campus Pathway Navigation
+Utilizes OpenStreetMap FOSSGIS walking profile routing to trace pathways inside campus grounds and off-road sites:
+```javascript
+let url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${startLng},${startLat};${endLng},${endLat}?overview=full&geometries=geojson&steps=true`;
+```
+
 ---
 
 # 🏗 System Architecture
 
 ```text
-Citizen / Employee / Manager / Admin
-                 │
-                 ▼
-        React + Vite Frontend
-                 │
-      React Router + Context API
-                 │
-              Axios
-                 │
-────────────────────────────────────
-                 │
-      Express.js REST Backend
-                 │
-Controllers → Services → Middleware
-                 │
-                 ▼
-           MySQL Database
+       Citizen / Employee / Manager / Admin
+                        │
+                        ▼
+               React + Vite Frontend
+                        │
+             React Router + Context API
+                        │
+                     Axios
+                        │
+─────────────────────────────────────────────
+                        │
+             Express.js REST Backend
+                        │
+    Controllers → Services → Middleware
+                        │
+                        ▼
+           MySQL Database (Aiven.io)
 ```
 
 ---
@@ -143,52 +118,26 @@ Controllers → Services → Middleware
 
 | Category | Technologies |
 |-----------|--------------|
-| **Frontend** | React, Vite, React Router, Context API, Axios, Chart.js, CSS3 |
+| **Frontend** | React, Vite, React Router, Context API, Axios, Leaflet, Chart.js, CSS3 |
 | **Backend** | Node.js, Express.js |
-| **Database** | MySQL (Connection Pooling, Normalization, Database Views) |
-| **Authentication** | Express Session, bcrypt.js, RBAC |
-| **Development Tools** | Git, GitHub, npm, Postman |
+| **Database** | MySQL (Connection Pooling, Database Views, 3NF Casing Normalization) |
+| **Authentication** | Express Session, bcrypt.js (SALT factor 10), RBAC |
 | **Integrations** | Twilio Programmatic SMS Gateway API (`notifier.js`) |
+| **Deployment** | GitHub, Render.com, Aiven.io, Clever Cloud |
 
 ---
 
-# 📊 Database Schema Modeling
+# 📊 Database Schema & Views
 
-The application architecture utilizes a clean, 3NF normalized persistence layer enforcing strict relational integrity controls (`ON DELETE CASCADE`, `ON UPDATE CASCADE`).
+The relational layer utilizes a clean, 3NF normalized database schema enforcing strict referential integrity (`ON DELETE SET NULL`, `ON UPDATE CASCADE`).
 
-```text
-               +------------------+             +--------------------+
-               |    Department    |1           *|      Vehicle       |
-               +------------------+-------------+--------------------+
-               | PK | dept_id     |             | PK | vehicle_id    |
-               |    | name        |             | FK | dept_id       |
-               | FK | manager_id  |----+        +--------------------+
-               +------------------+    |                  |1
-                        |1             |                  |
-                        |              |                  |*
-                        |* |        +--------------------+
-               +------------------+    |        |    Assigned_To     |
-               |     Employee     |    |        +--------------------+
-               +------------------+    |        | PK | assign_id     |
-               | PK | emp_id      |    |        | FK | emp_id        |
-               | FK | dept_id     |    |        | FK | vehicle_id    |
-               |    | role        |    |        | FK | route_id      |
-               +------------------+    |        | FK | complaint_id  |
-                        |1             |        +--------------------+
-                        |              |                  |1
-                        |* |                  |
-               +------------------+    |                  |*
-               |    Complaints    |    |        +--------------------+
-               |------------------+    |        |    Waste_Record    |
-               | PK | complaint_id|    |        +--------------------+
-               | FK | dept_id     |    |        | PK | record_id     |
-               | FK | route_id    |    |        | FK | route_id      |
-               | FK | assigned_emp|    |        | FK | assign_id     |
-               | FK | duplicate_id|    |        +--------------------+
-               +------------------+    |
-                        |              |
-                        +--------------+
-```
+To ensure complete compatibility with Linux production hosts (like Render.com), all database Views and Foreign Key references are built using strict, case-sensitive naming conventions:
+
+* **`v_employee_tasks`**: Materializes assignment and routing logs, feeding live coordinate metrics to the driver app.
+* **`v_pending_complaints`**: Lists open citizen reports.
+* **`v_waste_collection_stats`**: Summarizes collection weight records.
+* **`v_vehicle_usage`**: Audits regional vehicle workloads.
+* **`v_department_summary`**: Provides manager analytics summaries.
 
 ---
 
@@ -196,31 +145,29 @@ The application architecture utilizes a clean, 3NF normalized persistence layer 
 
 ```text
 WasteTrack/
-
 ├── frontend/
 │   ├── src/
-│   ├── components/
-│   │   ├── ProtectedRoute.jsx
-│   │   └── Toast.jsx
-│   ├── pages/
-│   │   ├── Complaints.jsx
-│   │   ├── EmployeeDashboard.jsx
-│   │   ├── Login.jsx
-│   │   ├── ManagerDashboard.jsx
-│   │   ├── Profile.jsx
-│   │   ├── Register.jsx
-│   │   ├── Stats.jsx
-│   │   └── Welcome.jsx
-│   ├── context/
-│   │   └── AuthContext.jsx
-│   ├── hooks/
-│   ├── services/
-│   │   └── api.js
-│   ├── utils/
-│   ├── styles/
-│   │   └── index.css
-│   ├── App.jsx
-│   └── main.jsx
+│   │   ├── components/
+│   │   │   ├── ProtectedRoute.jsx
+│   │   │   └── Toast.jsx
+│   │   ├── pages/
+│   │   │   ├── Complaints.jsx       # Citizen interactive map portal
+│   │   │   ├── EmployeeDashboard.jsx# Worker task dashboard & walking map
+│   │   │   ├── Login.jsx
+│   │   │   ├── ManagerDashboard.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── Register.jsx
+│   │   │   ├── Stats.jsx            # Stable Chart.js insights panel
+│   │   │   └── Welcome.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   ├── styles/
+│   │   │   └── index.css            # Responsive layouts & animations
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── dist/                        # Compiled production assets
 │
 ├── server/
 │   ├── controllers/
@@ -232,191 +179,115 @@ WasteTrack/
 │   ├── routes/
 │   ├── middleware/
 │   │   └── authMiddleware.js
-│   ├── services/
 │   ├── config/
-│   │   └── db.js
-│   ├── database/
-│   ├── models/
-│   └── utils/
-│       └── notifier.js
+│   │   └── db.js                    # Lazy pool proxy & automatic fallback
+│   ├── utils/
+│   │   └── notifier.js              # Twilio API driver & caller verification
+│   └── server.js
 │
-├── database_setup.sql
-├── package.json
+├── database_setup.sql                # Linux-compatible database migrations
+├── package.json                      # Monorepo prefix setup and startup commands
 └── README.md
 ```
 
 ---
 
-# 🔄 Complaint Workflow
+# 🔄 Complaint Lifecycle
 
 ```text
-Citizen
-    │
-Submit Complaint
-    │
-Complaint Registered (Algorithmic Text-Similarity Deduplication Running)
-    │
-Assigned to Department (Balanced-Workload Queue Selector Checking Drivers)
-    │
-Manager Assigns Employee (Optional Manager Re-Route / Vehicle Mapping Override)
-    │
-Employee Collects Waste (Live Telemetry Transmitted via Twilio SMS)
-    │
-Complaint Resolved (Employee Logs Container Weight - `weight_kg`)
-    │
-Dashboard Analytics Updated (Chart.js Elements Re-Fetch from Materialized SQL Views)
+Citizen Submit ──► text deduplication ──► auto driver queue ──► Twilio SMS alert
+                                                                      │
+                                                                      ▼
+waste log weight ◄── resolved state ◄── live telemetry routing ◄── assign truck
 ```
-
----
-
-# 📊 Dashboard Analytics
-
-Interactive dashboards provide insights into:
-- Total Complaints
-- Pending Complaints
-- Resolved Complaints
-- Department Performance
-- Employee Performance
-- Waste Collection Statistics (`weight_kg` logs)
-- Vehicle Usage
-- Complaint Trends
 
 ---
 
 # 🌟 Project Highlights
 
-- ✅ Modern React Single Page Application
-- ✅ Role-Based Dashboards
-- ✅ Secure Authentication & Authorization
-- ✅ RESTful API Architecture
-- ✅ Department-Based Access Control
-- ✅ Employee & Vehicle Management
-- ✅ Complaint Lifecycle Tracking
-- ✅ Interactive Analytics Dashboard
-- ✅ Responsive User Interface
-- ✅ Clean & Modular Codebase
+- **✅ Dual-Map Interface:** Seamless Leaflet map integrations for both citizen reporting (exact pinning) and worker navigation (live routing).
+- **✅ Cross-Platform Database:** Standardized MySQL casing schema which runs out-of-the-box on Windows local hosts and Linux production systems.
+- **✅ Self-Healing Database Schema:** Express backend queries column states on boot and runs automatic hot-migrations (`ALTER TABLE`) if coordinates fields are missing.
+- **✅ Persistent Chart.js Lifecycles:** Stats timelines are stabilized using absolute loading skeletons stacked over permanent DOM canvases, eliminating null-ref crashes on daily/monthly toggles.
+- **✅ Graceful SMS Gateways:** Twilio API sanitizes phone numbers and catches caller ID trial restriction codes (Error `21608`) dynamically, logging them to the database instead of throwing exceptions.
+- **✅ Unified Production Server:** Node.js backend serves React production assets out of the box (`frontend/dist`), eliminating the need to host separate web and API servers.
 
 ---
 
 # 🚀 Getting Started
 
-### Clone the Repository
-
+### 1. Clone & Install
 ```bash
-git clone [https://github.com/vedantvarma19/Waste-Track-.git](https://github.com/vedantvarma19/Waste-Track-.git)
+git clone https://github.com/vedantvarma19/Waste-Track-.git
+cd Waste-Track-
+npm install
 ```
 
-### Create Environment File
-Configure a `.env` file within your root server directory:
+### 2. Configure Environment Variables
+Create a `.env` file in the root directory:
 ```env
 MYSQL_HOST=localhost
-MYSQL_USER=your_mysql_username
+MYSQL_USER=root
 MYSQL_PASSWORD=your_mysql_password
 MYSQL_DATABASE=eco_route_manager
 MYSQL_PORT=3306
 SESSION_SECRET=your_session_secret
 
-# Optional Outbound Telemetry Configurations
+# Optional Twilio Outbound Telemetry
 TWILIO_ACCOUNT_SID=ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 TWILIO_AUTH_TOKEN=your_auth_token
 TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
 ```
 
-### Backend
-
+### 3. Run Locally (Development)
+To run both backend and frontend servers in development mode:
 ```bash
-npm install
+# In Root (Boots Backend)
 npm run dev
-```
 
-### Frontend
-
-```bash
+# In frontend/ (Boots React Client)
 cd frontend
-npm install
 npm run dev
 ```
 
----
+### 4. Deploying to Production (Render & Aiven)
+To build and host both servers together:
+```bash
+# Build React bundle and bundle backend dependencies
+npm run build
 
-# 📷 Screenshots
-
-> Add screenshots after uploading them to the repository.
-
-- 🏠 Landing Page
-- 👤 Citizen Dashboard
-- 👷 Employee Dashboard
-- 👨‍💼 Manager Dashboard
-- 🏛 Admin Dashboard
-- 📊 Analytics Dashboard
-- 📋 Complaint Tracking
-
----
-
-# 🎯 Future Enhancements
-
-- 🗺 Google Maps Integration
-- 🚛 Live Vehicle Tracking
-- 📍 GPS-Based Complaint Location
-- 🔔 Email & SMS Notifications
-- 📷 Before & After Complaint Images
-- 📱 Progressive Web App (PWA)
-- 🤖 AI-Based Complaint Classification
-- 🌡 Complaint Heatmaps
-- ⚡ Real-Time Dashboard using WebSockets
+# Start Production Server
+npm start
+```
 
 ---
 
 # 📚 Learning Outcomes
 
-This project strengthened my understanding of:
-- Full-Stack Web Development
-- React & Modern Frontend Architecture
-- REST API Development
-- Authentication & Authorization
-- Role-Based Access Control (RBAC)
-- Express.js Backend Development
-- MySQL Database Design
-- SQL Relationships & Normalization
-- Dashboard Development
-- API Integration
-- Clean Project Architecture
-- Git & GitHub Workflow
+- **Full-Stack Orchestration:** Express serving dynamic API routes alongside SPA static frontend bundles.
+- **Relational Integrity Casing:** Designing database views and queries with case-sensitive syntax for seamless Linux deployment.
+- **UI/UX Lifecycle Management:** Managing canvas destruction and asynchronous state locks during interactive chart toggles.
+- **Practical API Engineering:** Standardizing geolocation structures and building fail-safe fallbacks for outbound programmatic SMS gateways.
 
 ---
 
 # 🚀 Project Journey
 
-WasteTrack was originally developed as part of the **Database Management Systems (DBMS)** course to apply core database concepts—including relational modeling, normalization, SQL queries, constraints, and transaction management—to a real-world problem.
+WasteTrack was originally developed as part of the **Database Management Systems (DBMS)** course to apply relational modeling, normalizations, and transaction management to municipal waste collection. 
 
-The project was later redesigned into a modern full-stack application using **React**, **Vite**, **Express.js**, and **MySQL**. Features such as role-based dashboards, complaint assignment workflows, employee and vehicle management, analytics, and a responsive user interface were added to transform it into a portfolio-ready smart-city solution.
+It was later redesigned into a modern full-stack web application with role-based dashboard cockpits, balanced queue allocations, Leaflet interactive mapping coordinates, and live OSRM/OSM walkway routing systems to turn it into a portfolio-ready smart-city logistics solution.
 
-Today, WasteTrack showcases both strong database engineering fundamentals and modern web development practices through a scalable, role-based architecture.
-
-
-By - Vedant Varma,
-College : University Visvesvaraya College of Engineering (UVCE),
-Branch : Information Science Enginerring ,
-USN : U25UV24T064065 ,
-gmail : vedantvarma617@gmail.com
-**
-
----
-
-# ⭐ Support
-
-If you found this project useful:
-- ⭐ Star this repository
-- 🍴 Fork the project
-- 💡 Suggest improvements
-- 🐞 Report issues
+**By - Vedant Varma**
+* **College:** University Visvesvaraya College of Engineering (UVCE)
+* **Branch:** Information Science Engineering
+* **USN:** U25UV24T064065
+* **Email:** vedantvarma617@gmail.com
 
 ---
 
 <div align="center">
 
 ### ♻️ Making Cities Cleaner, Smarter, and More Sustainable
-
-**Built with ❤️ using React, Express.js, Node.js & MySQL**
+**Built with ❤️ using React, Express.js, Leaflet, Node.js & MySQL**
 
 </div>

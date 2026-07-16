@@ -5,16 +5,6 @@
 
 -- Database tables creation (created inside the connected database context)
 SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS Notification_Log;
-DROP TABLE IF EXISTS Complaints;
-DROP TABLE IF EXISTS Waste_Record;
-DROP TABLE IF EXISTS Serves;
-DROP TABLE IF EXISTS Assigned_To;
-DROP TABLE IF EXISTS Route;
-DROP TABLE IF EXISTS Vehicle;
-DROP TABLE IF EXISTS Employee;
-DROP TABLE IF EXISTS Department;
-SET FOREIGN_KEY_CHECKS = 1;
 
 -- -----------------------------------------------------
 -- Section 1: Create Tables
@@ -25,9 +15,11 @@ CREATE TABLE IF NOT EXISTS Department (
     dept_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     manager_name VARCHAR(100),
-    manager_id INT,                -- FK added later
+    manager_id INT,                -- FK
     email VARCHAR(100) UNIQUE,
-    location VARCHAR(150)
+    location VARCHAR(150),
+    CONSTRAINT fk_department_manager FOREIGN KEY (manager_id) REFERENCES Employee(emp_id) ON UPDATE CASCADE ON DELETE SET NULL,
+    CONSTRAINT uq_department_manager UNIQUE (manager_id)
 );
 
 -- 2) Employee (Updated with all new fields and 'Head' role)
@@ -105,8 +97,11 @@ CREATE TABLE IF NOT EXISTS Assigned_To (
     CONSTRAINT fk_assigned_route FOREIGN KEY (route_id)
         REFERENCES Route(route_id)
         ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_assigned_complaint FOREIGN KEY (complaint_id)
+        REFERENCES Complaints(complaint_id)
+        ON UPDATE CASCADE
         ON DELETE SET NULL
-    -- We will add FK for complaint_id after Complaints table is created
 );
 
 -- 6) Serves (Vehicle <-> Route M:N bridge)
@@ -177,38 +172,16 @@ CREATE TABLE IF NOT EXISTS Complaints (
         ON DELETE SET NULL
 );
 
--- -----------------------------------------------------
--- Section 2: Add Deferred Foreign Keys
--- -----------------------------------------------------
-ALTER TABLE Department
-    ADD CONSTRAINT fk_department_manager
-    FOREIGN KEY (manager_id) REFERENCES Employee(emp_id)
-    ON UPDATE CASCADE
-    ON DELETE SET NULL,
-    ADD CONSTRAINT uq_department_manager UNIQUE (manager_id);
-
-ALTER TABLE Assigned_To
-    ADD CONSTRAINT fk_assigned_complaint
-    FOREIGN KEY (complaint_id) REFERENCES Complaints(complaint_id)
-    ON UPDATE CASCADE
-    ON DELETE SET NULL;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- -----------------------------------------------------
 -- Section 3: Populate Test Data
 -- -----------------------------------------------------
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE Complaints;
-TRUNCATE TABLE Waste_Record;
-TRUNCATE TABLE Assigned_To;
-TRUNCATE TABLE Serves;
-TRUNCATE TABLE Route;
-TRUNCATE TABLE Vehicle;
-TRUNCATE TABLE Employee;
-TRUNCATE TABLE Department;
-SET FOREIGN_KEY_CHECKS = 1;
+-- We preserve existing production data by avoiding TRUNCATE or DROP operations on restart.
+-- We use INSERT IGNORE statements to seed initial default records if not present.
 
 -- Populate Departments
-INSERT INTO Department (dept_id, name, location) VALUES
+INSERT IGNORE INTO Department (dept_id, name, location) VALUES
 (1, 'South Zone', 'Jayanagar, JP Nagar, BTM Layout'),
 (2, 'West Zone', 'Rajajinagar, Yeshwanthpur, Malleswaram'),
 (3, 'East Zone', 'Indiranagar, Whitefield, Marathahalli'),
@@ -216,7 +189,7 @@ INSERT INTO Department (dept_id, name, location) VALUES
 (5, 'Central Zone', 'MG Road, Shivajinagar, Majestic');
 
 -- Populate Employees (Password for all is 'pass123', HASH: $2b$10$S63r1XLwkNlZ7WZr8CEoluML6kKWEMGb0Xy7K2ftjoRQ42xeERhj.)
-INSERT INTO Employee (emp_id, name, email, password, role, dept_id, job_title, status) VALUES
+INSERT IGNORE INTO Employee (emp_id, name, email, password, role, dept_id, job_title, status) VALUES
 (1, 'Priya Sharma', 'manager.south@wastetrack.com', '$2b$10$S63r1XLwkNlZ7WZr8CEoluML6kKWEMGb0Xy7K2ftjoRQ42xeERhj.', 'Manager', 1, 'Zone Manager', 'Active'),
 (2, 'Anil Kumar', 'emp.anil@wastetrack.com', '$2b$10$S63r1XLwkNlZ7WZr8CEoluML6kKWEMGb0Xy7K2ftjoRQ42xeERhj.', 'Employee', 1, 'Driver', 'Active'),
 (3, 'Sunita Rao', 'emp.sunita@wastetrack.com', '$2b$10$S63r1XLwkNlZ7WZr8CEoluML6kKWEMGb0Xy7K2ftjoRQ42xeERhj.', 'Employee', 1, 'Cleaner', 'Active'),
@@ -246,7 +219,7 @@ UPDATE Department SET manager_id = 13 WHERE dept_id = 4;
 UPDATE Department SET manager_id = 17 WHERE dept_id = 5;
 
 -- Populate Vehicles
-INSERT INTO Vehicle (vehicle_id, vehicle_no, dept_id, vehicle_type, status) VALUES
+INSERT IGNORE INTO Vehicle (vehicle_id, vehicle_no, dept_id, vehicle_type, status) VALUES
 (1, 'KA-05-MA-1001', 1, 'Tipper Truck', 'Available'),(2, 'KA-05-MA-1002', 1, 'Tipper Truck', 'In Use'), (3, 'KA-05-MB-1003', 1, 'Compactor', 'Available'),(4, 'KA-05-MC-1004', 1, 'Mini Truck', 'In Maintenance'),
 (5, 'KA-02-MA-2001', 2, 'Tipper Truck', 'Available'),(6, 'KA-02-MB-2002', 2, 'Compactor', 'In Use'),(7, 'KA-02-MC-2003', 2, 'Mini Truck', 'Available'),(8, 'KA-02-MD-2004', 2, 'Tipper Truck', 'Available'),
 (9, 'KA-03-MA-3001', 3, 'Compactor', 'Available'),(10, 'KA-03-MB-3002', 3, 'Compactor', 'Available'),(11, 'KA-03-MC-3003', 3, 'Tipper Truck', 'In Use'),(12, 'KA-03-MD-3004', 3, 'Mini Truck', 'Available'),
@@ -254,7 +227,7 @@ INSERT INTO Vehicle (vehicle_id, vehicle_no, dept_id, vehicle_type, status) VALU
 (17, 'KA-01-MA-5001', 5, 'Mini Truck', 'Available'),(18, 'KA-01-MB-5002', 5, 'Mini Truck', 'In Use'),(19, 'KA-01-MC-5003', 5, 'Tipper Truck', 'Available'),(20, 'KA-01-MD-5004', 5, 'Compactor', 'In Maintenance');
 
 -- Populate Routes (MODIFIED: Added dept_id)
-INSERT INTO Route (route_id, route_name, location, distance, dept_id) VALUES
+INSERT IGNORE INTO Route (route_id, route_name, location, distance, dept_id) VALUES
 (1, 'Jayanagar 4th Block', 'Jayanagar', 12.5, 1),(2, 'JP Nagar 2nd Phase', 'JP Nagar', 15.0, 1),(3, 'BTM 1st Stage', 'BTM Layout', 10.2, 1),(4, 'Koramangala 5th Block', 'Koramangala (Near South)', 8.8, 1),
 (5, 'Rajajinagar 1st Block', 'Rajajinagar', 11.0, 2),(6, 'Malleswaram 8th Cross', 'Malleswaram', 9.5, 2),(7, 'Yeshwanthpur Market', 'Yeshwanthpur', 14.0, 2),(8, 'Nagasandra Circle', 'Nagasandra', 16.3, 2),
 (9, 'Indiranagar 100 Ft Rd', 'Indiranagar', 13.0, 3),(10, 'Whitefield ITPL', 'Whitefield', 22.5, 3),(11, 'Marathahalli Bridge', 'Marathahalli', 18.0, 3),(12, 'Bellandur Lake Rd', 'Bellandur', 19.2, 3),
@@ -262,13 +235,13 @@ INSERT INTO Route (route_id, route_name, location, distance, dept_id) VALUES
 (17, 'MG Road & Brigade', 'MG Road', 7.5, 5),(18, 'Shivajinagar Bus Stand', 'Shivajinagar', 6.0, 5),(19, 'Commercial Street', 'Tasker Town', 5.5, 5),(20, 'Majestic Market Area', 'Majestic', 9.0, 5);
 
 -- Populate Serves (Vehicle <-> Route)
-INSERT INTO Serves (vehicle_id, route_id) VALUES
+INSERT IGNORE INTO Serves (vehicle_id, route_id) VALUES
 (1, 1), (1, 2), (2, 3), (2, 4), (3, 1), (3, 4), (5, 5), (5, 6), (6, 7), (6, 8), (7, 5), (8, 6),
 (9, 9), (9, 10), (10, 11), (10, 12), (11, 9), (12, 11), (13, 13), (13, 16), (14, 14), (15, 15), (16, 13),
 (17, 17), (17, 19), (18, 18), (18, 20), (19, 17), (20, 20);
 
 -- Populate Complaints
-INSERT INTO Complaints (complaint_id, citizen_name, contact_no, location, description, route_id, dept_id, assigned_emp, status, complaint_date) VALUES
+INSERT IGNORE INTO Complaints (complaint_id, citizen_name, contact_no, location, description, route_id, dept_id, assigned_emp, status, complaint_date) VALUES
 (1, 'Rohan Gupta', '9880011111', 'Jayanagar 4th Block', 'Garbage not picked up for 3 days.', 1, 1, 2, 'Resolved', '2025-10-20 10:00:00'),
 (2, 'Aditi Rao', '9880011112', 'JP Nagar', 'Large pile of construction debris blocking road.', 2, 1, 3, 'In Progress', '2025-10-21 11:00:00'),
 (3, 'Vikram Reddy', '9880011113', 'BTM Layout', 'Overflowing bin near BTM Water Tank.', 3, 1, 4, 'In Progress', '2025-10-22 12:00:00'),
@@ -296,7 +269,7 @@ INSERT INTO Complaints (complaint_id, citizen_name, contact_no, location, descri
 (25, 'Anand Murthy', '9880055555', 'Brigade Road', 'Overflowing bin, attracting stray dogs.', 17, 5, 19, 'In Progress', '2025-10-24 14:00:00');
 
 -- Populate Waste_Record
-INSERT INTO Waste_Record (record_id, route_id, waste_type, weight_kg, collection_date) VALUES
+INSERT IGNORE INTO Waste_Record (record_id, route_id, waste_type, weight_kg, collection_date) VALUES
 (1, 1, 'Mixed Waste', 250.5, '2025-10-25'), (2, 2, 'Construction', 750.0, '2025-10-25'),(3, 3, 'Mixed Waste', 310.2, '2025-10-25'),(4, 4, 'Garden Waste', 120.0, '2025-10-24'),(5, 1, 'Mixed Waste', 230.0, '2025-10-24'),
 (6, 5, 'Mixed Waste', 400.7, '2025-10-25'),(7, 6, 'Recyclable', 150.0, '2025-10-25'),(8, 7, 'Market Waste', 900.0, '2025-10-25'),(9, 8, 'Mixed Waste', 210.5, '2025-10-24'),(10, 6, 'Recyclable', 180.3, '2025-10-24'),
 (11, 9, 'Commercial', 620.0, '2025-10-25'),(12, 10, 'Mixed Waste', 300.0, '2025-10-25'),(13, 11, 'Mixed Waste', 280.8, '2025-10-24'),(14, 12, 'Plastic Waste', 450.0, '2025-10-24'),(15, 10, 'Mixed Waste', 310.0, '2025-10-23'),
@@ -304,7 +277,7 @@ INSERT INTO Waste_Record (record_id, route_id, waste_type, weight_kg, collection
 (21, 19, 'Commercial', 350.0, '2025-10-24'),(22, 20, 'Market Waste', 850.0, '2025-10-24');
 
 -- Populate Assigned_To
-INSERT INTO Assigned_To (assign_id, emp_id, vehicle_id, route_id, complaint_id, assign_date) VALUES
+INSERT IGNORE INTO Assigned_To (assign_id, emp_id, vehicle_id, route_id, complaint_id, assign_date) VALUES
 (1, 2, 1, 1, 1, '2025-10-25'), (2, 3, 2, 2, 2, '2025-10-25'),(3, 4, 3, 3, 3, '2025-10-25'),
 (4, 6, 5, 5, 6, '2025-10-25'), (5, 7, 6, 7, 7, '2025-10-25'),(6, 8, 7, 6, 8, '2025-10-25'),
 (7, 10, 9, 9, 11, '2025-10-25'),(8, 11, 10, 11, 12, '2025-10-25'),(9, 12, 11, 10, 13, '2025-10-25'),
@@ -377,8 +350,7 @@ LEFT JOIN Waste_Record w ON w.route_id = a.route_id AND w.collection_date = a.as
 LEFT JOIN Department d ON e.dept_id = d.dept_id;
 
 -- 10) Notification_Log
-DROP TABLE IF EXISTS Notification_Log;
-CREATE TABLE Notification_Log (
+CREATE TABLE IF NOT EXISTS Notification_Log (
     notification_id INT AUTO_INCREMENT PRIMARY KEY,
     complaint_id INT,
     citizen_name VARCHAR(100),
